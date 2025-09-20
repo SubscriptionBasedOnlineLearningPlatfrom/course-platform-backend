@@ -1,3 +1,4 @@
+import { supabase } from "../../config/supabaseClient.js";
 
 
 export const dashboardModel = async (studentId) => {

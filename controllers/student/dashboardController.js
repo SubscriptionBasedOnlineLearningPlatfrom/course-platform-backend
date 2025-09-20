@@ -1,6 +1,6 @@
 import { da } from "zod/v4/locales";
 import { supabase } from "../../config/supabaseClient.js";
-import { dashboardModel, enrolledCoursesModel } from "../../models/student/dashboardModels.js";
+import { dashboardModel, enrolledCoursesModel } from "../../models/student/dashboardModel.js";
 
 export const dashboardController = async (req, res) => {
     try {
