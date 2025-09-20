@@ -1,4 +1,4 @@
-import { createChapter, removeChapter } from '../../models/chapterModel.js';
+import { createChapter, removeChapter } from '../../models/instructor/chapterModel.js';
 
 export const addChapter = async (req, res) => {
   try {

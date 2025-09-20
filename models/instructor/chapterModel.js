@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabaseClient.js';
+import { supabase } from '../../config/supabaseClient.js';
 
 // Add a chapter (lesson) to a module
 export const createChapter = async (moduleId, lessonTitle) => {

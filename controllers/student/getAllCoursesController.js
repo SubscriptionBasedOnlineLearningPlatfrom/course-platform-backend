@@ -1,4 +1,4 @@
-import { getAllCourses } from "../../models/courseModel.js";
+import { getAllCourses } from "../../models/student/courseModel.js";
 
 // GET all courses for "Public users"
 export const fetchCourses = async (req, res) => {

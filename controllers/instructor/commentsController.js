@@ -1,43 +1,13 @@
 import { supabase } from "../../config/supabaseClient.js";
 import { z } from 'zod';
+import { createReplyModel, studentCommentsModel, updateReplyModel } from "../../models/instructor/commentModel.js";
 
 export const viewStudentsComments = async (req, res) => {
     try {
         const instructor_id = req.instructorId;
 
-        const { data: comments, commentError } = await supabase
-            .from('students_comments_for_instructor')
-            .select('*')
-            .eq('instructor_id', instructor_id);
-
-        if (commentError) {
-            return res.status().json({ error: error.message })
-        }
-
-        console.log(comments);
-        const { data: replies, repliesError } = await supabase
-            .from('instructor_replies_for_comments')
-            .select('*')
-            // .eq('instructor_id', instructor_id)
-            .order("updated_at", { ascending: false });
-
-        if (repliesError) {
-            return res.status(500).json({ error: error.message })
-        }
+        const withReplies = await studentCommentsModel(instructor_id);
         
-        const repliesByComment = (replies || []).reduce((acc, reply) => {
-            (acc[reply.comment_id] ||= []).push(reply);
-            return acc;
-        }, {})
-
-        const withReplies = (comments || []).reduce((acc, comment) => {
-            acc[comment.comment_id] = {
-                ...comment,
-                replies: repliesByComment[comment.comment_id] || []
-            }
-            return acc;
-
-        }, {})
         // console.log(JSON.stringify(withReplies, null, 2));
         return res.status(200).json(withReplies);
 
@@ -68,15 +38,8 @@ export const createReplyForComment = async (req, res) => {
             return res.status(400).json({ error: parsed.error });
         }
 
-        const { data, error } = await supabase
-            .from("instructor_replies")
-            .insert(parsed.data)
-            .select('*')
-            .single();
-
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
+        const {comment_id, instructor_id, reply_text} = parsed.data;
+        const data = createReplyModel(comment_id, instructor_id, reply_text);
         console.log(data);
         return res.json(data);
 
@@ -93,6 +56,9 @@ const updateReplySchema = z.object({
 
 export const updateReplyForComment = async (req, res) => {
     try {
+
+        const reply_id = req.params.replyId;
+
         const parsed = updateReplySchema.safeParse({
             reply_text: req.body.reply_text
         })
@@ -101,17 +67,10 @@ export const updateReplyForComment = async (req, res) => {
             return res.status(400).json({ error: parsed.error });
         }
 
-        const { data, error } = await supabase
-            .from("instructor_replies")
-            .update({ reply_text: parsed.data.reply_text, updated_at: new Date().toISOString() })
-            .eq('reply_id', req.params.replyId)
-            .select('*')
-            .single();
+        const {reply_text} = parsed.data;
 
-        if (error) {
-            return res.status(400).json({ error: error.message });
-        }
-
+        const data = updateReplyModel(reply_id,reply_text);
+        
         return res.json(data);
 
     } catch (error) {
@@ -123,14 +82,9 @@ export const updateReplyForComment = async (req, res) => {
 export const deleteReply = async (req, res) => {
 
     try {
-        const { error } = await supabase
-            .from("instructor_replies")
-            .delete()
-            .eq("reply_id", req.params.replyId);
+        const reply_id = req.params.reply_id;
 
-        if (error) {
-            return res.status(400).json({ error: error.message });
-        }
+        deleteReply(reply_id);
 
         return res.status(200).send()
     } catch (error) {
