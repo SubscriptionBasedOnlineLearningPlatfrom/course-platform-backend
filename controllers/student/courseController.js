@@ -31,7 +31,7 @@ export const enrollment = async (req, res) => {
 
         const { course_id, student_id } = parsed.data;
 
-        const data = createEnrollment(course_id, student_id);
+        const data = await createEnrollment(course_id, student_id);
 
         return res.status(200).json(data);
     } catch (error) {
@@ -53,7 +53,7 @@ export const fetchRelatedCourses = async (req, res) => {
 export const viewCommentsWithReplies = async (req,res) => {
     try {
         const courseId = req.params.courseId;
-        const comments = commentsReplies(courseId);
+        const comments =await commentsReplies(courseId);
 
         return res.json({ comments });
 
@@ -68,7 +68,7 @@ export const postComment = async (req, res) => {
         const course_id = req.params.courseId;
         console.log(course_id)
         const { student_id, rating, comment_text } = req.body;
-        const data = createComment(course_id, student_id, rating, comment_text);
+        const data =await createComment(course_id, student_id, rating, comment_text);
         return res.status(200).json(data);
     } catch (error) {
         console.log(error);
@@ -80,7 +80,7 @@ export const postReply = async (req, res) => {
     try {
         
         const { comment_id, student_id, reply_text } = req.body;
-        const data = createReply(comment_id, student_id, reply_text);
+        const data =await createReply(comment_id, student_id, reply_text);
         return res.status(200).json(data);
     }
     catch (error) {

@@ -7,8 +7,8 @@ export const EnrollementOverview = async (req,res) => {
     try {
         const instructorId = req.instructorId;
 
-        const data = enrollmentOverviewModel(instructorId);
-
+        const data =await enrollmentOverviewModel(instructorId);
+        console.log(data)
         res.json(data);
 
     } catch (error) {
@@ -24,7 +24,7 @@ export const viewCreatedCourses = async (req,res,next) => {
     try {
         const instructorId = req.instructorId;
 
-        const data = createdCoursesModel(instructorId);
+        const data = await createdCoursesModel(instructorId);
 
         res.json(data);
 
@@ -37,7 +37,7 @@ export const editCreatedCourse = async (req,res,next) => {
     try {
         const courseId = req.params.courseId;
         const { course_title, course_description, category } = req.body;
-        const data = editCreatedCourseModel(course_title, course_description, category);
+        const data =await editCreatedCourseModel(course_title, course_description, category);
         
         res.json(data);
 

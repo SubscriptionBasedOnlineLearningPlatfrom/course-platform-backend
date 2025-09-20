@@ -7,7 +7,7 @@ export const viewStudentsComments = async (req, res) => {
         const instructor_id = req.instructorId;
 
         const withReplies = await studentCommentsModel(instructor_id);
-        
+
         // console.log(JSON.stringify(withReplies, null, 2));
         return res.status(200).json(withReplies);
 
@@ -38,11 +38,9 @@ export const createReplyForComment = async (req, res) => {
             return res.status(400).json({ error: parsed.error });
         }
 
-        const {comment_id, instructor_id, reply_text} = parsed.data;
-        const data = createReplyModel(comment_id, instructor_id, reply_text);
-        console.log(data);
+        const { comment_id, instructor_id, reply_text } = parsed.data;
+        const data = await createReplyModel(comment_id, instructor_id, reply_text);
         return res.json(data);
-
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({ error: "Internal server error", details: error.message });
@@ -67,10 +65,10 @@ export const updateReplyForComment = async (req, res) => {
             return res.status(400).json({ error: parsed.error });
         }
 
-        const {reply_text} = parsed.data;
+        const { reply_text } = parsed.data;
 
-        const data = updateReplyModel(reply_id,reply_text);
-        
+        const data = await updateReplyModel(reply_id, reply_text);
+
         return res.json(data);
 
     } catch (error) {
@@ -84,7 +82,7 @@ export const deleteReply = async (req, res) => {
     try {
         const reply_id = req.params.reply_id;
 
-        deleteReply(reply_id);
+        await deleteReply(reply_id);
 
         return res.status(200).send()
     } catch (error) {

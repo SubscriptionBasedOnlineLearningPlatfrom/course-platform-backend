@@ -45,6 +45,7 @@ export const createReplyModel = async (comment_id, instructor_id, reply_text) =>
         .single();
 
     if (error) {
+        console.log(error);
         return res.status(500).json({ error: error.message });
     }
 

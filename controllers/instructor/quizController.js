@@ -35,7 +35,7 @@ export const quizCreation = async (req, res) => {
 
         const { lesson_id, quiz_title, questions } = parsed.data;
 
-        const data = quizCreationModel(lesson_id, quiz_title, questions);
+        const data =await quizCreationModel(lesson_id, quiz_title, questions);
 
         return res.status(201).json({ quiz_id: data });
     } catch (error) {
@@ -47,7 +47,7 @@ export const quizCreation = async (req, res) => {
 export const loadQuiz = async (req,res) => {
     try {
         const {lesson_id} = 'f1dcb0c9-17de-4fe8-8ccf-c5e973faa444' //req.params;
-        const full = loadQuizModel(lesson_id);
+        const full = await loadQuizModel(lesson_id);
         
         return res.json(full);
 

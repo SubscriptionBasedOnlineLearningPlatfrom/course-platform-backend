@@ -8,6 +8,7 @@ export const enrollmentOverviewModel = async (instructorId) => {
     if (error) {
         return res.status(500).json({ error: error.message });
     }
+    
     return data;
 }
 
