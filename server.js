@@ -19,8 +19,6 @@ import dashboardRouter from "./routes/student/dashboardRouter.js";
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
 
-
-
 dotenv.config();
 
 const app = express();
