@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabaseClient.js';
+import { supabase } from '../../config/supabaseClient.js';
 
 export const createModule = async (courseId, title) => {
   // Get the last module order for this course

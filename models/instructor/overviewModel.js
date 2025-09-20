@@ -1,3 +1,5 @@
+import { supabase } from "../../config/supabaseClient.js";
+
 export const enrollmentOverviewModel = async (instructorId) => {
     const { data, error } = await supabase
         .from('v_enrollment_overview')

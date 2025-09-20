@@ -1,4 +1,4 @@
-import { createModule, getModulesByCourse, removeModule } from '../../models/moduleModel.js';
+import { createModule, getModulesByCourse, removeModule } from '../../models/instructor/moduleModel.js';
 
 export const addModule = async (req, res) => {
   try {

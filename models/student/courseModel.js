@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabaseClient.js";
+import { supabase } from "../../config/supabaseClient.js";
 
 // Fetch all courses
 export const getAllCourses = async () => {

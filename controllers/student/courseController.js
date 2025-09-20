@@ -1,5 +1,5 @@
 import { supabase } from "../../config/supabaseClient.js";
-import { courseDetailsByCourseId ,commentsReplies, createEnrollment, getRelatedCourses, createComment} from "../../models/courseModel.js";
+import { courseDetailsByCourseId ,commentsReplies, createEnrollment, getRelatedCourses, createComment} from "../../models/student/courseModel.js";
 import { z } from 'zod';
 
 export const courseDetails = async (req, res) => {
