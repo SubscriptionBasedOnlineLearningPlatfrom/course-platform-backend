@@ -16,6 +16,7 @@ import moduleRoutes from './routes/instructor/moduleRoutes.js';
 import chapterRoutes from './routes/instructor/chapterRoutes.js';
 import authRoutes from "./routes/auth.js";
 import dashboardRouter from "./routes/student/dashboardRouter.js";
+import courseContentRoutes from "./routes/student/courseContentRoutes.js";
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
 
@@ -57,6 +58,7 @@ app.use("/instructor/chapters", chapterRoutes);
 // students
 app.use("/student/courses", courseRouter);
 app.use('/student/dashboard', dashboardRouter);
+app.use('/student/course', courseContentRoutes);
 // Routes
 app.use("/auth", authRoutes);
 
