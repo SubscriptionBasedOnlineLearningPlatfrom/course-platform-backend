@@ -12,6 +12,4 @@ courseRouter.get("/comments-with-replies/:courseId", viewCommentsWithReplies);
 courseRouter.post("/create-comment/:courseId", postComment);
 courseRouter.post("/create-reply", postReply);
 
-
-
 export default courseRouter;

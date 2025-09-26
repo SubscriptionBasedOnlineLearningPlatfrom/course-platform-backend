@@ -1,6 +1,5 @@
 import { supabase } from "../../config/supabaseClient.js";
 
-
 export const dashboardModel = async (studentId) => {
     const { data: dashboardData, error } = await supabase
             .from('student_dashboard')
@@ -17,7 +16,6 @@ export const dashboardModel = async (studentId) => {
         );
         
         if (streakErr) {
-            console.log(streakErr);
             return res.status(500).json({ error: streakErr.message });
         }
         return {
@@ -33,7 +31,6 @@ export const enrolledCoursesModel = async (studentId) => {
             .eq('student_id', studentId);   
 
         if (error) {
-            console.log(error);
             return res.status(500).json({ error: error.message });
         }
         return courses;

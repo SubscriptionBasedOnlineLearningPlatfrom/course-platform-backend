@@ -2,6 +2,7 @@ import { da } from "zod/v4/locales";
 import { supabase } from "../../config/supabaseClient.js";
 import { dashboardModel, enrolledCoursesModel } from "../../models/student/dashboardModel.js";
 
+// get enrolled courses counts, streaks and certificates
 export const dashboardController = async (req, res) => {
     try {
         const studentId = 'd6279018-9f8c-499a-bb78-f40874d2903d' //req.studentId;
@@ -17,6 +18,7 @@ export const dashboardController = async (req, res) => {
     }
 }
 
+// view enrolled courses
 export const enrolledCourses = async (req, res) => {
     try {
         const studentId = 'd6279018-9f8c-499a-bb78-f40874d2903d' //req.studentId;   

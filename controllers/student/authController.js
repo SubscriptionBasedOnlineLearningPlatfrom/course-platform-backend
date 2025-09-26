@@ -35,6 +35,7 @@ export const register = async (req, res) => {
         const token = signJwt({ id: user.instructor_id, username: user.username, email: user.email });
 
         res.json({ message: "Signup successful", token });
+
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
@@ -56,7 +57,6 @@ export const googleCallback = async (req, res) => {
     try {
         const user = req.user;
         const token = signJwt({ id: user.instructor_id, username: user.username, email: user.email });
-        // redirect with token (or set cookie)
         res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${token}`);
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
@@ -93,7 +93,7 @@ export const updatePassword = async (req, res) => {
     try {
         const { token, newPassword } = updatePasswordSchema.parse(req.body);
 
-        // set a session with the access token (password recovery token behaves like access_token)
+        // set a session with the access token
         const { data: session, error: sessionError } = await supabase.auth.setSession({
             access_token: token,
             refresh_token: "",

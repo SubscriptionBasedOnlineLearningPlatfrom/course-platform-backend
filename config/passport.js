@@ -12,7 +12,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-/** Call in server.js after app creation */
 export const configurePassport = () => {
   // Local
   passport.use(
@@ -54,10 +53,10 @@ export const configurePassport = () => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_PATH, // e.g. "/auth/google/callback"
+        callbackURL: process.env.GOOGLE_CALLBACK_PATH,
         scope: ["profile", "email"],
       },
-      /** DO NOT use res here; Passport gives (issuer, profile, cb) */
+      
       async (issuer, profile, cb) => {
         try {
           const email = profile?.emails?.[0]?.value;
