@@ -4,7 +4,7 @@ import cors from "cors";
 // import session from "express-session"; // optional if you use sessions, not needed for JWT only
 import dotenv from "dotenv";
 import 'dotenv/config';
-import cookieParser from "cookie-parser";
+// import cookieParser from "cookie-parser";
 import session from "express-session";
 // import cookieParser from "cookie-parser";
 // import { supabase } from "./Database/SupabaseClient.js";
@@ -14,6 +14,7 @@ import QuizRouter from "./routes/instructor/quizRouter.js";
 import courseRouter from "./routes/student/courseRouter.js";
 import moduleRoutes from './routes/instructor/moduleRoutes.js';
 import chapterRoutes from './routes/instructor/chapterRoutes.js';
+import courseRoutes from './routes/instructor/courseRoutes.js';
 import authRoutes from "./routes/auth.js";
 import dashboardRouter from "./routes/student/dashboardRouter.js";
 import courseContentRoutes from "./routes/student/courseContentRoutes.js";
@@ -54,6 +55,7 @@ app.use("/instructor/comments", commentRouter);
 app.use("/instructor/quizzes", QuizRouter);
 app.use("/instructor/modules", moduleRoutes);
 app.use("/instructor/chapters", chapterRoutes);
+app.use("/instructor/courses", courseRoutes);
 
 // students
 app.use("/student/courses", courseRouter);
