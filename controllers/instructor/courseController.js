@@ -15,6 +15,19 @@ export const CourseController = {
         });
       }
 
+      // Validate duration if provided
+      let validatedDuration = null;
+      if (duration !== undefined && duration !== null && duration !== "") {
+        const durationNum = parseInt(duration);
+        if (isNaN(durationNum) || durationNum <= 0) {
+          return res.status(400).json({
+            success: false,
+            error: "Duration must be a positive number (in hours)",
+          });
+        }
+        validatedDuration = durationNum;
+      }
+
       // Ensure level is properly capitalized (safety net)
       const normalizedLevel = level.charAt(0).toUpperCase() + level.slice(1).toLowerCase();
 
@@ -24,8 +37,7 @@ export const CourseController = {
         description,
         category,
         level: normalizedLevel, // Use the normalized level
-        // price,
-        duration,
+        duration: validatedDuration,
         requirements,
       };
 

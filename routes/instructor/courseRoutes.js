@@ -7,15 +7,7 @@ const router = express.Router();
 // Middleware to protect all routes (require JWT authentication)
 const requireAuth = passport.authenticate("jwt", { session: false });
 
-// TEMPORARY: Fake auth middleware for testing (REMOVE IN PRODUCTION)
-const fakeAuth = (req, res, next) => {
-  req.user = {
-    instructor_id: "f4aae234-333a-4cb1-ba6a-8a97cbd8c80c", // Using existing instructor ID
-    email: "test@example.com",
-    name: "Test Instructor"
-  };
-  next();
-};
+// Proper JWT authentication middleware is defined above as requireAuth
 
 // Public route for getting all courses (for students)
 router.get("/public/all", CourseController.getPublishedCourses);
@@ -47,11 +39,11 @@ router.get("/test/structure", async (req, res) => {
   }
 });
 
-// Course routes for instructors - TEMPORARILY using fakeAuth for testing
-router.post("/", fakeAuth, CourseController.createCourse);
-router.get("/", fakeAuth, CourseController.getInstructorCourses);
-router.get("/:courseId", fakeAuth, CourseController.getCourseById);
-router.put("/:courseId", fakeAuth, CourseController.updateCourse);
-router.delete("/:courseId", fakeAuth, CourseController.deleteCourse);
+// Course routes for instructors - using proper JWT authentication
+router.post("/", requireAuth, CourseController.createCourse);
+router.get("/", requireAuth, CourseController.getInstructorCourses);
+router.get("/:courseId", requireAuth, CourseController.getCourseById);
+router.put("/:courseId", requireAuth, CourseController.updateCourse);
+router.delete("/:courseId", requireAuth, CourseController.deleteCourse);
 
 export default router;

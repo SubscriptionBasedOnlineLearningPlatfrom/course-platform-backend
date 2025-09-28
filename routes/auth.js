@@ -366,7 +366,15 @@ router.post("/register", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ message: "Signup successful", token });
+    res.json({ 
+      message: "Signup successful", 
+      token,
+      user: {
+        id: data.instructor_id,
+        username: data.username,
+        email: data.email
+      }
+    });
   } catch (err) {
     console.error("Signup error:", err);
     res.status(500).json({ error: err.message });
@@ -385,7 +393,16 @@ router.post("/login", (req, res, next) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ message: "Login successful", token });
+    // Return both token and user data for consistency with register
+    res.json({ 
+      message: "Login successful", 
+      token,
+      user: {
+        id: user.instructor_id,
+        username: user.username,
+        email: user.email
+      }
+    });
   })(req, res, next);
 });
 
