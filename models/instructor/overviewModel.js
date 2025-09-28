@@ -6,7 +6,7 @@ export const enrollmentOverviewModel = async (instructorId) => {
         .select('*')
         .eq('instructor_id', instructorId);
     if (error) {
-        return res.status(500).json({ error: error.message });
+        throw new Error(error.message);
     }
     
     return data;
@@ -19,7 +19,7 @@ export const createdCoursesModel = async (instructorId) => {
         .eq('instructor_id', instructorId);
 
     if (error) {
-        return res.status(500).json({ error: error.message });
+        throw new Error(error.message);
     }
     return data;
 }
@@ -31,7 +31,7 @@ export const editCreatedCourseModel = async (course_title, course_description, c
                                     .eq('course_id', courseId)
         .single();
     if (error) {
-        return res.status(500).json({ error: error.message });
+        throw new Error(error.message);
     }
 
     return data;

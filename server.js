@@ -17,6 +17,7 @@ import chapterRoutes from './routes/instructor/chapterRoutes.js';
 import authRoutes from "./routes/auth.js";
 import dashboardRouter from "./routes/student/dashboardRouter.js";
 import authRouter from "./routes/student/authRoute.js";
+import subscriptionRoute from "./routes/student/subscriptionRoute.js";
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
 
@@ -43,7 +44,7 @@ app.use(session({
 
 // Initialize Passport
 app.use(passport.initialize());
-
+app.use(passport.session()); 
 // -------------------- ROUTES --------------------
 app.get("/", (req, res) => {
   res.send("✅ Server running. Go to /signup or /login");
@@ -59,6 +60,7 @@ app.use("/instructor/chapters", chapterRoutes);
 app.use("/student/courses", courseRouter);
 app.use('/student/dashboard', dashboardRouter);
 app.use('/student/auth', authRouter);
+app.use('/student/subscription', subscriptionRoute);
 
 // Routes
 app.use("/auth", authRoutes);

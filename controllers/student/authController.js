@@ -19,7 +19,7 @@ export const emailOnlySchema = z.object({
 });
 
 export const updatePasswordSchema = z.object({
-    token: z.string().min(10),
+    studentToken: z.string().min(10),
     newPassword: z.string().min(6),
 });
 
@@ -32,9 +32,9 @@ export const register = async (req, res) => {
         if (existing) return res.status(400).json({ error: "User already exists" });
 
         const user = await createUser({ username, email, password });
-        const token = signJwt({ id: user.instructor_id, username: user.username, email: user.email });
+        const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
 
-        res.json({ message: "Signup successful", token });
+        res.json({ message: "Signup successful", studentToken });
 
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
@@ -45,8 +45,8 @@ export const register = async (req, res) => {
 export const loginSuccess = async (req, res) => {
     try {
         const user = req.user;
-        const token = signJwt({ id: user.instructor_id, username: user.username, email: user.email });
-        res.json({ message: "Login successful", token });
+        const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
+        res.json({ message: "Login successful", studentToken });
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
@@ -56,8 +56,8 @@ export const loginSuccess = async (req, res) => {
 export const googleCallback = async (req, res) => {
     try {
         const user = req.user;
-        const token = signJwt({ id: user.instructor_id, username: user.username, email: user.email });
-        res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${token}`);
+        const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
+        res.redirect(`${process.env.FRONTEND_URL}/dashboard?studentToken=${studentToken}`);
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
@@ -91,17 +91,17 @@ export const resetPassword = async (req, res) => {
 
 export const updatePassword = async (req, res) => {
     try {
-        const { token, newPassword } = updatePasswordSchema.parse(req.body);
+        const { studentToken, newPassword } = updatePasswordSchema.parse(req.body);
 
-        // set a session with the access token
+        // set a session with the access studentToken
         const { data: session, error: sessionError } = await supabase.auth.setSession({
-            access_token: token,
-            refresh_token: "",
+            access_studentToken: studentstudentToken,
+            refresh_studentstudentToken: "",
         });
         if (sessionError) throw sessionError;
 
         const userId = session?.user?.id;
-        if (!userId) throw new Error("Invalid or expired reset token.");
+        if (!userId) throw new Error("Invalid or expired reset studentToken.");
 
         const { error } = await supabase.auth.admin.updateUserById(userId, { password: newPassword });
         if (error) throw error;

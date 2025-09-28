@@ -8,8 +8,7 @@ export const quizCreationModel = async (lesson_id, quiz_title, questions) => {
     })
 
     if (error) {
-        console.log(error);
-        return res.status(500).json({ error: error.message });
+        throw new Error(error.message);
     }
 
     return data;
@@ -22,7 +21,7 @@ export const loadQuizModel = async (lessonId) => {
                                                     .eq('lesson_id',lessonId);
         
         if(quizError){
-            return res.status(500).json({ error: quizError.message });
+            throw new Error(quizError.message);
         }
         
 
@@ -33,7 +32,7 @@ export const loadQuizModel = async (lessonId) => {
                                                             .order('created_at', {ascending:true});
 
         if(questionsError){
-            return res.status(500).json({ error: questionsError.message });
+            throw new Error(questionsError.message);
         }
 
         const questionsIds = questions.map(q => q.question_id);
@@ -43,7 +42,7 @@ export const loadQuizModel = async (lessonId) => {
                                                          .in('question_id',questionsIds);
 
         if(answersError){
-            return res.status(500).json({ error : answersError});
+            throw new Error(answersError.message);
         }
 
         const full = questions.map(q => ({

@@ -1,6 +1,7 @@
 import express from 'express'
 import { courseDetails, enrollment, fetchRelatedCourses, postComment, postReply, viewCommentsWithReplies } from '../../controllers/student/courseController.js';
 import { fetchCourses } from "../../controllers/student/getAllCoursesController.js";
+import { studentAuth } from '../../middlewares/authMiddleware.js';
 
 const courseRouter = express.Router();
 
@@ -9,7 +10,7 @@ courseRouter.post('/enrollment', enrollment);
 courseRouter.get("/related-courses/:category",fetchRelatedCourses);
 courseRouter.get("/", fetchCourses);
 courseRouter.get("/comments-with-replies/:courseId", viewCommentsWithReplies);
-courseRouter.post("/create-comment/:courseId", postComment);
-courseRouter.post("/create-reply", postReply);
+courseRouter.post("/create-comment/:courseId",studentAuth, postComment);
+courseRouter.post("/create-reply",studentAuth, postReply);
 
 export default courseRouter;

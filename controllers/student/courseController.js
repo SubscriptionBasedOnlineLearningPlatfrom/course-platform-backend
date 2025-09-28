@@ -1,4 +1,4 @@
-import { courseDetailsByCourseId ,commentsReplies, createEnrollment, getRelatedCourses, createComment} from "../../models/student/courseModel.js";
+import { courseDetailsByCourseId ,commentsReplies, createEnrollment, getRelatedCourses, createComment, createReply} from "../../models/student/courseModel.js";
 import { z } from 'zod';
 
 export const courseDetails = async (req, res) => {
@@ -50,7 +50,7 @@ export const fetchRelatedCourses = async (req, res) => {
 // fetch comments and replies for viewing students
 export const viewCommentsWithReplies = async (req,res) => {
     try {
-        const courseId = req.params.courseId;
+        const {courseId} = req.params;
         const comments =await commentsReplies(courseId);
         return res.json({ comments });
 
@@ -63,12 +63,15 @@ export const viewCommentsWithReplies = async (req,res) => {
 // create a comment
 export const postComment = async (req, res) => {
     try {
+        const student_id = req.studentId;
+        console.log(student_id);
         const course_id = req.params.courseId;
-        const { student_id, rating, comment_text } = req.body;
+        const { rating, comment_text } = req.body;
         const data =await createComment(course_id, student_id, rating, comment_text);
         return res.status(200).json(data);
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }   
 }
@@ -76,12 +79,14 @@ export const postComment = async (req, res) => {
 // create a reply
 export const postReply = async (req, res) => {
     try {
-        const { comment_id, student_id, reply_text } = req.body;
+        const student_id = req.studentId;
+        const { comment_id, reply_text } = req.body;
         const data =await createReply(comment_id, student_id, reply_text);
         return res.status(200).json(data);
 
     }
     catch (error) {
+        console.log(error)
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }   
 }

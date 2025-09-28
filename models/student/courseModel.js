@@ -16,7 +16,7 @@ export const courseDetailsByCourseId = async (courseId) => {
                                                         .single();
 
     if (courseError) {
-        return res.status(500).json({ error: courseError });
+        throw new Error(courseError.message);
     }
 
     const { data: modules, error: modulesError } = await supabase
@@ -26,7 +26,7 @@ export const courseDetailsByCourseId = async (courseId) => {
                                                             .order("module_order", { ascending: true })
 
     if (modulesError) {
-        return res.status(500).json({ error: modulesError });
+        throw new Error(modulesError.message);
     }
     return { course, modules };
 }
@@ -40,10 +40,32 @@ export const createEnrollment = async (course_id, student_id) => {
                                     .single();
 
     if (error) {
-        return res.status(500).json({ error: error.message });
+        throw new Error(error.message);
     }
     return data;
 }
+
+export const createPayment = async (student_id, course_id, transaction_id, plan) => {
+ 
+    const { data, error } = await supabase
+      .from("payments")
+      .insert([
+        {
+          student_id,
+          course_id,
+          transaction_id,
+          plan
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data;
+  
+};
 
 export const getRelatedCourses = async (category) => {
     const { data: courses, error } = await supabase
@@ -53,7 +75,7 @@ export const getRelatedCourses = async (category) => {
                                             .limit(3);
 
         if (error) {
-            return res.status(500).json({ error: error.message });
+            throw new Error(error.message);
         }  
         return courses; 
 }
@@ -67,7 +89,7 @@ export const commentsReplies = async (courseId) => {
                                                             .order("created_at", { ascending: false });
 
         if (commentsError) {
-            return res.status(500).json({ error: commentsError });
+            throw new Error(commentsError.message);
         }
 
         const { data: studentReplies, error: studentRepliesError } = await supabase
@@ -76,7 +98,7 @@ export const commentsReplies = async (courseId) => {
                                                                             .order("created_at", { ascending: false });
 
         if (studentRepliesError) {
-            return res.status(500).json({ error: studentRepliesError });
+            throw new Error(studentRepliesError.message);
         }
 
         const repliesByComment = {};
@@ -87,7 +109,7 @@ export const commentsReplies = async (courseId) => {
                                                                                     .order("created_at", { ascending: false });
 
         if (instructorRepliesError) {
-            return res.status(500).json({ error: instructorRepliesError });
+            throw new Error(instructorRepliesError.message);
         }
 
         [...(studentReplies || []), ...(instructorReplies || [])].forEach(reply => {
@@ -113,7 +135,7 @@ export const createComment = async (course_id, student_id, rating, comment_text)
                                     .single();
 
         if (error) {
-            return res.status(500).json({ error: error.message });
+            throw new Error(error.message);
         }
         return data;
 }
@@ -125,7 +147,7 @@ export const createReply = async (comment_id, student_id, reply_text) => {
                                     .select("*")
                                     .single();
         if (error) {
-            return res.status(500).json({ error: error.message });
+            throw new Error(error.message);
         }
         return data;
 }

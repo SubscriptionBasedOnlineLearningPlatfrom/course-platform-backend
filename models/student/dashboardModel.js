@@ -5,9 +5,10 @@ export const dashboardModel = async (studentId) => {
             .from('student_dashboard')
             .select('*')
             .eq('student_id', studentId)
-            .single();
+            .maybeSingle();
         if (error) {
-            return res.status(500).json({ error: error.message });
+            console.log(error);
+            throw new Error(error.message);
         }
 
         const { data: streakData, error: streakErr } = await supabase.rpc(
@@ -16,7 +17,7 @@ export const dashboardModel = async (studentId) => {
         );
         
         if (streakErr) {
-            return res.status(500).json({ error: streakErr.message });
+            throw new Error(streakErr.message);
         }
         return {
             dashboard:dashboardData,
@@ -31,7 +32,7 @@ export const enrolledCoursesModel = async (studentId) => {
             .eq('student_id', studentId);   
 
         if (error) {
-            return res.status(500).json({ error: error.message });
+            throw new Error(error.message);
         }
         return courses;
 }
