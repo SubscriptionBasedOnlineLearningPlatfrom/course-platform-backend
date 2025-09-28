@@ -422,9 +422,15 @@ router.get(
       { expiresIn: "1h" }
     );
 
-    // res.json({ message: "Google login successful", token });
-    res.redirect(`http://localhost:5173/dashboard?token=${token}`);
+    // Encode user data to pass it safely in URL
+    const userData = encodeURIComponent(JSON.stringify({
+      id: req.user.instructor_id,
+      username: req.user.username,
+      email: req.user.email
+    }));
 
+    // Redirect with both token and user data
+    res.redirect(`http://localhost:5173/dashboard?token=${token}&user=${userData}`);
   }
 );
 router.post("/reset-password", async (req, res) => {
