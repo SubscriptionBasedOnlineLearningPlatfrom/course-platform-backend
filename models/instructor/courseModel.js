@@ -22,7 +22,7 @@ export const CourseModel = {
             category: courseData.category,
             level: courseData.level,
             rating: 0, // Default rating for new courses
-            duration: courseData.duration ? parseInt(courseData.duration) : null,
+            duration: courseData.duration, // Already validated and converted in controller
             requirements: courseData.requirements || null,
             // language field exists but we don't set it (will use default or NULL)
           },
