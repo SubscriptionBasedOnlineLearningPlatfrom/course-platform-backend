@@ -45,14 +45,13 @@ export const createEnrollment = async (course_id, student_id) => {
     return data;
 }
 
-export const createPayment = async (student_id, course_id, transaction_id, plan) => {
+export const createPayment = async (student_id, transaction_id, plan) => {
  
     const { data, error } = await supabase
       .from("payments")
       .insert([
         {
           student_id,
-          course_id,
           transaction_id,
           plan
         },

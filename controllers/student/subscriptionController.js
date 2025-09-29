@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { createEnrollment, createPayment } from "../../models/student/courseModel.js";
+import { activeModel } from "../../models/student/subscriptionModel.js";
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -61,7 +62,7 @@ export const confirmCheckout = async (req, res) => {
         }
 
         const enrollment = await createEnrollment(course_id, studentId);
-        const payment = await createPayment(studentId, course_id, plan, session.subscription?.id);
+        const payment = await createPayment(studentId, plan, session.subscription?.id);
 
         return res.status(200).json({
             ok: true,
@@ -75,3 +76,27 @@ export const confirmCheckout = async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 };
+
+// check payment expiry
+export const checkPaymentActive = async (req, res) => {
+    const studentId = req.studentId;
+
+    const paymentActive = await activeModel(studentId);
+
+    if (!paymentActive || paymentActive.length === 0) {
+        return res.json({ has_payment: false, is_active: false });
+    }
+
+    const payment = paymentActive[0];
+    const createdAt = new Date(payment.created_at);
+    const expiryAt = new Date(createdAt);
+    expiryAt.setMonth(expiryAt.getMonth() + 1);
+
+    const isActive = expiryAt > new Date();
+
+    return res.json({
+        payment,
+        expiry_at: expiryAt.toISOString(),
+        is_active: isActive,
+    });
+}
