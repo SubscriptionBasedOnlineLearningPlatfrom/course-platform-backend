@@ -45,26 +45,19 @@ export const createEnrollment = async (course_id, student_id) => {
     return data;
 }
 
-export const createPayment = async (student_id, transaction_id, plan) => {
- 
+export const checkEnrollment = async (course_id, student_id) => {
     const { data, error } = await supabase
-      .from("payments")
-      .insert([
-        {
-          student_id,
-          transaction_id,
-          plan
-        },
-      ])
-      .select()
-      .single();
+                                    .from("enrollments")
+                                    .select("*")
+                                    .eq("course_id", course_id)
+                                    .eq("student_id", student_id) ;
 
-    if (error) {
+    if (error){
         throw new Error(error.message);
     }
-    return data;
-  
-};
+
+    return data.length > 0; 
+}
 
 export const getRelatedCourses = async (category) => {
     const { data: courses, error } = await supabase

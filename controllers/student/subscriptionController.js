@@ -1,6 +1,6 @@
 import Stripe from "stripe";
-import { createEnrollment, createPayment } from "../../models/student/courseModel.js";
-import { activeModel } from "../../models/student/subscriptionModel.js";
+import { createEnrollment } from "../../models/student/courseModel.js";
+import { activeModel, createPayment } from "../../models/student/subscriptionModel.js";
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

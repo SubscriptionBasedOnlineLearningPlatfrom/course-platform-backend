@@ -15,3 +15,24 @@ export const activeModel = async (student_id) => {
 
     return data;
 }
+
+export const createPayment = async (student_id, transaction_id, plan) => {
+ 
+    const { data, error } = await supabase
+      .from("payments")
+      .insert([
+        {
+          student_id,
+          transaction_id,
+          plan
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data;
+  
+};
