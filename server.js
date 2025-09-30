@@ -72,10 +72,10 @@ app.use("/auth", authRoutes);
 // app.use("/auth", authRoutes); // signup, login, dashboard
 
 // -------------------- ERROR HANDLER --------------------
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Something went wrong!" });
-});
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).json({ error: "Something went wrong!" });
+// });
 
 // -------------------- START SERVER --------------------
 const PORT = process.env.PORT || 4000;
