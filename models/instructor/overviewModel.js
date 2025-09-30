@@ -8,7 +8,7 @@ export const enrollmentOverviewModel = async (instructorId) => {
     if (error) {
         throw new Error(error.message);
     }
-    
+
     return data;
 }
 
@@ -26,9 +26,9 @@ export const createdCoursesModel = async (instructorId) => {
 
 export const editCreatedCourseModel = async (course_title, course_description, category) => {
     const { data, error } = await supabase
-                                    .from('courses')
-                                    .update({ course_title, course_description, category, updated_at: new Date().toISOString() })
-                                    .eq('course_id', courseId)
+        .from('courses')
+        .update({ course_title, course_description, category, updated_at: new Date().toISOString() })
+        .eq('course_id', courseId)
         .single();
     if (error) {
         throw new Error(error.message);
