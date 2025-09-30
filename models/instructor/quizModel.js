@@ -50,4 +50,6 @@ export const loadQuizModel = async (lessonId) => {
             answers:(answers || []).filter(ans => ans.question_id === q.question_id).map(a => a.answer_text),
             correctAnswer: (answers || []).filter(a => a.question_id === q.question_id).findIndex(a => a.is_correct)
         }))
+
+        return full;
 }

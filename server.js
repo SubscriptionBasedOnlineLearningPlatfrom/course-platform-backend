@@ -18,6 +18,7 @@ import authRoutes from "./routes/auth.js";
 import dashboardRouter from "./routes/student/dashboardRouter.js";
 import authRouter from "./routes/student/authRoute.js";
 import subscriptionRoute from "./routes/student/subscriptionRoute.js";
+import quizRouter from "./routes/student/quizRoute.js";
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
 
@@ -61,6 +62,7 @@ app.use("/student/courses", courseRouter);
 app.use('/student/dashboard', dashboardRouter);
 app.use('/student/auth', authRouter);
 app.use('/student/subscription', subscriptionRoute);
+app.use("/student/quizzes", quizRouter);
 
 // Routes
 app.use("/auth", authRoutes);
