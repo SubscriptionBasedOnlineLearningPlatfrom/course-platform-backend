@@ -1,0 +1,42 @@
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+🚀 Server running on http://localhost:4000
+(node:72287) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
+ SDK releases are limited to address critical bug fixes and security issues only.
+
+Please migrate your code to use AWS SDK for JavaScript (v3).
+For more information, check the blog post at https://a.co/cUPnyil
+(Use `node --trace-warnings ...` to show where the warning was created)
+✅ Created Supabase Auth user: 68f65d5a-27d1-439b-b1c1-a2cf1e403186
+✅ Created instructor record: f052f2fe-d00e-4726-8a8e-4e8e4818b72a
+🔔 /reset-password called with: testuser789@example.com
+✅ resetPasswordForEmail response: {}
+✅ Created Supabase Auth user: 6a93f104-5039-4d9d-aea1-5754bc504df0
+✅ Created instructor record: 6368ebc9-0c1b-4fd0-a53c-ea52a6ce7901
+✅ Created Supabase Auth user: 9712e0e0-f605-4fb5-8aa1-39c376f5d682
+✅ Created instructor record: 3a4aec12-1377-4a80-bb7f-a12d5ff43182
+🔔 /reset-password called with: onlinelearningplatform89@gmail.com
+✅ resetPasswordForEmail response: {}
+🔄 Updating password for user: 9712e0e0-f605-4fb5-8aa1-39c376f5d682
+❌ Supabase admin error: AuthWeakPasswordError: Password should be at least 6 characters.
+    at handleError (/Users/sivapriya/Documents/vs_code_files/Semester 05 project/course-platform-backend/node_modules/@supabase/auth-js/dist/main/lib/fetch.js:61:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async _handleRequest (/Users/sivapriya/Documents/vs_code_files/Semester 05 project/course-platform-backend/node_modules/@supabase/auth-js/dist/main/lib/fetch.js:114:9)
+    at async _request (/Users/sivapriya/Documents/vs_code_files/Semester 05 project/course-platform-backend/node_modules/@supabase/auth-js/dist/main/lib/fetch.js:95:18)
+    at async GoTrueAdminApi.updateUserById (/Users/sivapriya/Documents/vs_code_files/Semester 05 project/course-platform-backend/node_modules/@supabase/auth-js/dist/main/GoTrueAdminApi.js:202:20)
+    at async file:///Users/sivapriya/Documents/vs_code_files/Semester%2005%20project/course-platform-backend/routes/auth.js:511:29 {
+  __isAuthError: true,
+  status: 422,
+  code: 'weak_password',
+  reasons: [ 'length' ]
+}
+❌ /update-password error: Password should be at least 6 characters.
+🔄 Updating password for user: 9712e0e0-f605-4fb5-8aa1-39c376f5d682
+✅ Password updated successfully for user: 9712e0e0-f605-4fb5-8aa1-39c376f5d682
+🔔 /reset-password called with: newuser@example.com
+✅ resetPasswordForEmail response: {}
+🔔 /reset-password called with: newuser@example.com
+✅ resetPasswordForEmail response: {}
+❌ /update-password error: Invalid or expired reset token.
