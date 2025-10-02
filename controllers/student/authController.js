@@ -31,12 +31,13 @@ export const register = async (req, res) => {
         const existing = await findUserByEmail(email);
         if (existing) return res.status(400).json({ error: "User already exists" });
 
-        const user = await createUser({ username, email, password });
-        const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
+        const student = await createUser({ username, email, password });
+        const studentToken = signJwt({ id: student.student_id, username: student.username, email: student.email });
 
         res.json({ message: "Signup successful", studentToken });
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 
@@ -45,9 +46,11 @@ export const register = async (req, res) => {
 export const loginSuccess = async (req, res) => {
     try {
         const user = req.user;
+        console.log(user);
         const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
         res.json({ message: "Login successful", studentToken });
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 
@@ -55,7 +58,8 @@ export const loginSuccess = async (req, res) => {
 
 export const googleCallback = async (req, res) => {
     try {
-        const user = req.user;
+        const user = req.student;
+        console.log(user);
         const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
         res.redirect(`${process.env.FRONTEND_URL}/dashboard?studentToken=${studentToken}`);
     } catch (error) {

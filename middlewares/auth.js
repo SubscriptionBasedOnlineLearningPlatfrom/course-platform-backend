@@ -5,7 +5,7 @@ import { findUserByEmail, verifyPassword } from "../models/student/authModel.js"
 
 // ----- Local (email/password) -----
 passport.use(
-  "local",
+  "student-local",
   new LocalStrategy(
     {
       usernameField: "email",    // reads req.body.email
@@ -31,6 +31,7 @@ passport.use(
 
 // ----- JWT (protect /student/auth/dashboard, etc.) -----
 passport.use(
+  "student-google", 
   new JwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

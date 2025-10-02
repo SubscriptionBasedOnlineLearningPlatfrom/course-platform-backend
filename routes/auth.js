@@ -278,6 +278,8 @@ passport.use(
           .select("*")
           .eq("instructor_id", jwtPayload.id)
           .single();
+          console.log("Hi")
+          console.log(user);
 
         if (error || !user) return done(null, false);
 
@@ -306,6 +308,8 @@ passport.use(
           .select("*")
           .eq("email", profile.emails[0].value)
           .single();
+
+        console.log(user);
 
         if (user) return cb(null, user);
 

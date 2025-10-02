@@ -39,10 +39,15 @@ export const studentCommentsModel = async (instructor_id) => {
 export const createReplyModel = async (comment_id, instructor_id, reply_text) => {
     const { data, error } = await supabase
         .from("instructor_replies")
-        .insert(comment_id, instructor_id, reply_text)
-        .select('*')
-        .single();
-
+        .insert([
+            {
+                comment_id: comment_id,
+                instructor_id: instructor_id,
+                reply_text: reply_text,
+            }
+        ])
+        .select('*');
+    console.log(data);
     if (error) {
         throw new Error(error.message);
     }

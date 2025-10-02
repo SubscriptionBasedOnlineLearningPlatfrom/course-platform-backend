@@ -29,7 +29,7 @@ export const editCreatedCourse = async (req,res,next) => {
     try {
         const courseId = req.params.courseId;
         const { course_title, course_description, category } = req.body;
-        const data =await editCreatedCourseModel(course_title, course_description, category);
+        const data =await editCreatedCourseModel(courseId,course_title, course_description, category);
         res.json(data);
 
     } catch (error) {

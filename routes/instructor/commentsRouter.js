@@ -7,6 +7,6 @@ const commentRouter = express.Router();
 commentRouter.get("/comments",auth, viewStudentsComments);
 commentRouter.post("/:commentId/replies",auth, createReplyForComment);
 commentRouter.put("/update-reply/:replyId", updateReplyForComment);
-commentRouter.delete("/delete-reply/:replyId", deleteReply);
+commentRouter.delete("/delete-reply/:reply_id", deleteReply);
 
 export default commentRouter;

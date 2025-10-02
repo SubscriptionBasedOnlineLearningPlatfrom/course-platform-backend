@@ -24,7 +24,7 @@ export const createdCoursesModel = async (instructorId) => {
     return data;
 }
 
-export const editCreatedCourseModel = async (course_title, course_description, category) => {
+export const editCreatedCourseModel = async (courseId,course_title, course_description, category) => {
     const { data, error } = await supabase
         .from('courses')
         .update({ course_title, course_description, category, updated_at: new Date().toISOString() })

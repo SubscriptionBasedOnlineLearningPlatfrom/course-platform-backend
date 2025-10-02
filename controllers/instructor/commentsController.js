@@ -1,11 +1,14 @@
 import { z } from 'zod';
-import { createReplyModel, studentCommentsModel, updateReplyModel } from "../../models/instructor/commentModel.js";
+import { createReplyModel, deleteReplyModel, studentCommentsModel, updateReplyModel } from "../../models/instructor/commentModel.js";
 
 // fetch comments with replies for instructors
 export const viewStudentsComments = async (req, res) => {
     try {
+        // const instructor_id = req.instructorId;
         const instructor_id = req.instructorId;
+
         const withReplies = await studentCommentsModel(instructor_id);
+        
         return res.status(200).json(withReplies);
 
     } catch (error) {
@@ -34,6 +37,7 @@ export const createReplyForComment = async (req, res) => {
         }
 
         const { comment_id, instructor_id, reply_text } = parsed.data;
+        
         const data = await createReplyModel(comment_id, instructor_id, reply_text);
         return res.json(data);
 
@@ -72,7 +76,10 @@ export const updateReplyForComment = async (req, res) => {
 export const deleteReply = async (req, res) => {
     try {
         const reply_id = req.params.reply_id;
-        await deleteReply(reply_id);
+        if (!reply_id) {
+            return res.status(400).json({ error: "reply_id is required" });
+        }
+        await deleteReplyModel(reply_id);
         return res.status(200).send();
     } catch (error) {
         return res.status(500).json({ error: "Internal server error", details: error.message });

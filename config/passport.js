@@ -15,6 +15,7 @@ dotenv.config();
 export const configurePassport = () => {
   // Local
   passport.use(
+    "student-google", 
     new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
       try {
         const user = await findUserByEmail(email);
@@ -30,6 +31,7 @@ export const configurePassport = () => {
 
   // JWT
   passport.use(
+    "student-google", 
     new JwtStrategy(
       {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -49,6 +51,7 @@ export const configurePassport = () => {
 
   // Google
   passport.use(
+    "student-google", 
     new GoogleStrategy(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
