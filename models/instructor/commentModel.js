@@ -1,6 +1,6 @@
 import { supabase } from "../../config/supabaseClient.js";
 
-
+// create models 
 export const studentCommentsModel = async (instructor_id) => {
     const { data: comments, commentError } = await supabase
         .from('students_comments_for_instructor')
@@ -8,17 +8,16 @@ export const studentCommentsModel = async (instructor_id) => {
         .eq('instructor_id', instructor_id);
 
     if (commentError) {
-        return res.status().json({ error: error.message })
+        throw new Error(commentError.message);
     }
 
     const { data: replies, repliesError } = await supabase
         .from('instructor_replies_for_comments')
         .select('*')
-        // .eq('instructor_id', instructor_id)
         .order("updated_at", { ascending: false });
 
     if (repliesError) {
-        return res.status(500).json({ error: error.message })
+        throw new Error(repliesError.message);
     }
 
     const repliesByComment = (replies || []).reduce((acc, reply) => {
@@ -40,12 +39,17 @@ export const studentCommentsModel = async (instructor_id) => {
 export const createReplyModel = async (comment_id, instructor_id, reply_text) => {
     const { data, error } = await supabase
         .from("instructor_replies")
-        .insert(comment_id, instructor_id, reply_text)
-        .select('*')
-        .single();
-
+        .insert([
+            {
+                comment_id: comment_id,
+                instructor_id: instructor_id,
+                reply_text: reply_text,
+            }
+        ])
+        .select('*');
+    console.log(data);
     if (error) {
-        return res.status(500).json({ error: error.message });
+        throw new Error(error.message);
     }
 
     return data;
@@ -53,25 +57,25 @@ export const createReplyModel = async (comment_id, instructor_id, reply_text) =>
 
 export const updateReplyModel = async (reply_id, reply_text) => {
     const { data, error } = await supabase
-            .from("instructor_replies")
-            .update({ reply_text: reply_text, updated_at: new Date().toISOString() })
-            .eq('reply_id', reply_id)
-            .select('*')
-            .single();
+        .from("instructor_replies")
+        .update({ reply_text: reply_text, updated_at: new Date().toISOString() })
+        .eq('reply_id', reply_id)
+        .select('*')
+        .single();
 
-        if (error) {
-            return res.status(400).json({ error: error.message });
-        }
-        return data;
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data;
 }
 
 export const deleteReplyModel = async (reply_id) => {
     const { error } = await supabase
-            .from("instructor_replies")
-            .delete()
-            .eq("reply_id", reply_id);
+        .from("instructor_replies")
+        .delete()
+        .eq("reply_id", reply_id);
 
-        if (error) {
-            return res.status(400).json({ error: error.message });
-        }
+    if (error) {
+        throw new Error(error.message);
+    }
 }

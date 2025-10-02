@@ -6,8 +6,9 @@ export const enrollmentOverviewModel = async (instructorId) => {
         .select('*')
         .eq('instructor_id', instructorId);
     if (error) {
-        return res.status(500).json({ error: error.message });
+        throw new Error(error.message);
     }
+
     return data;
 }
 
@@ -18,19 +19,19 @@ export const createdCoursesModel = async (instructorId) => {
         .eq('instructor_id', instructorId);
 
     if (error) {
-        return res.status(500).json({ error: error.message });
+        throw new Error(error.message);
     }
     return data;
 }
 
-export const editCreatedCourseModel = async (course_title, course_description, category) => {
+export const editCreatedCourseModel = async (courseId,course_title, course_description, category) => {
     const { data, error } = await supabase
         .from('courses')
         .update({ course_title, course_description, category, updated_at: new Date().toISOString() })
         .eq('course_id', courseId)
         .single();
     if (error) {
-        return res.status(500).json({ error: error.message });
+        throw new Error(error.message);
     }
 
     return data;

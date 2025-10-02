@@ -1,14 +1,10 @@
-import { supabase } from "../../config/supabaseClient.js";
-import { courseDetailsByCourseId ,commentsReplies, createEnrollment, getRelatedCourses, createComment} from "../../models/student/courseModel.js";
+import { courseDetailsByCourseId, commentsReplies, createEnrollment, getRelatedCourses, createComment, createReply, checkEnrollment } from "../../models/student/courseModel.js";
 import { z } from 'zod';
 
 export const courseDetails = async (req, res) => {
-
     try {
         const courseId = req.params.courseId;
-
         const { course, modules } = await courseDetailsByCourseId(courseId);
-
         return res.json({ course, modules })
 
     } catch (error) {
@@ -21,6 +17,7 @@ const enrollmentSchema = z.object({
     student_id: z.uuid()
 })
 
+// create a enrollment
 export const enrollment = async (req, res) => {
     try {
         const parsed = enrollmentSchema.safeParse(req.body);
@@ -30,60 +27,89 @@ export const enrollment = async (req, res) => {
         }
 
         const { course_id, student_id } = parsed.data;
-
-        const data = createEnrollment(course_id, student_id);
-
+        const data = await createEnrollment(course_id, student_id);
         return res.status(200).json(data);
+
     } catch (error) {
-        return res.status(500).json({error:"Internal Server Error", details:error.message});
+        return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 
 }
 
+
+export const checkCourseEnrollment = async (req, res) => {
+    try {
+        const studentId = req.studentId;
+        const { courseId } = req.params;
+        const isEnrolled = await checkEnrollment(courseId, studentId);
+
+        if (!studentId) {
+            return res.status(401).json({ error: 'Unauthorized - studentId missing' });
+        }
+
+        if (!courseId) {
+            return res.status(400).json({ error: 'courseId is required in body' });
+        }
+
+        res.json({ isEnrolled })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Internal Server Error", details: error.message });
+    }
+}
+
+// fetch courses which separate with categories
 export const fetchRelatedCourses = async (req, res) => {
     try {
         const category = req.params.category;
-        const courses = await getRelatedCourses(category); 
+        const courses = await getRelatedCourses(category);
         return res.status(200).json({ courses });
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 }
 
-export const viewCommentsWithReplies = async (req,res) => {
+// fetch comments and replies for viewing students
+export const viewCommentsWithReplies = async (req, res) => {
     try {
-        const courseId = req.params.courseId;
-        const comments = commentsReplies(courseId);
-
+        const { courseId } = req.params;
+        const comments = await commentsReplies(courseId);
         return res.json({ comments });
 
     } catch (error) {
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
-        
+
 }
 
+// create a comment
 export const postComment = async (req, res) => {
     try {
+        const student_id = req.studentId;
+        console.log(student_id);
         const course_id = req.params.courseId;
-        console.log(course_id)
-        const { student_id, rating, comment_text } = req.body;
-        const data = createComment(course_id, student_id, rating, comment_text);
+        const { rating, comment_text } = req.body;
+        const data = await createComment(course_id, student_id, rating, comment_text);
         return res.status(200).json(data);
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
-    }   
+    }
 }
 
+// create a reply
 export const postReply = async (req, res) => {
     try {
-        
-        const { comment_id, student_id, reply_text } = req.body;
-        const data = createReply(comment_id, student_id, reply_text);
+        const student_id = req.studentId;
+        const { comment_id, reply_text } = req.body;
+        const data = await createReply(comment_id, student_id, reply_text);
         return res.status(200).json(data);
+
     }
     catch (error) {
+        console.log(error)
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
-    }   
+    }
 }
