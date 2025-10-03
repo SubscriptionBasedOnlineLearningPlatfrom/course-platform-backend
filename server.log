@@ -1,42 +1,414 @@
-[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
-[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
-[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
-[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
 🚀 Server running on http://localhost:4000
-(node:72287) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
+(node:74835) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
  SDK releases are limited to address critical bug fixes and security issues only.
 
 Please migrate your code to use AWS SDK for JavaScript (v3).
 For more information, check the blog post at https://a.co/cUPnyil
 (Use `node --trace-warnings ...` to show where the warning was created)
-✅ Created Supabase Auth user: 68f65d5a-27d1-439b-b1c1-a2cf1e403186
-✅ Created instructor record: f052f2fe-d00e-4726-8a8e-4e8e4818b72a
-🔔 /reset-password called with: testuser789@example.com
-✅ resetPasswordForEmail response: {}
-✅ Created Supabase Auth user: 6a93f104-5039-4d9d-aea1-5754bc504df0
-✅ Created instructor record: 6368ebc9-0c1b-4fd0-a53c-ea52a6ce7901
-✅ Created Supabase Auth user: 9712e0e0-f605-4fb5-8aa1-39c376f5d682
-✅ Created instructor record: 3a4aec12-1377-4a80-bb7f-a12d5ff43182
-🔔 /reset-password called with: onlinelearningplatform89@gmail.com
-✅ resetPasswordForEmail response: {}
-🔄 Updating password for user: 9712e0e0-f605-4fb5-8aa1-39c376f5d682
-❌ Supabase admin error: AuthWeakPasswordError: Password should be at least 6 characters.
-    at handleError (/Users/sivapriya/Documents/vs_code_files/Semester 05 project/course-platform-backend/node_modules/@supabase/auth-js/dist/main/lib/fetch.js:61:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
-    at async _handleRequest (/Users/sivapriya/Documents/vs_code_files/Semester 05 project/course-platform-backend/node_modules/@supabase/auth-js/dist/main/lib/fetch.js:114:9)
-    at async _request (/Users/sivapriya/Documents/vs_code_files/Semester 05 project/course-platform-backend/node_modules/@supabase/auth-js/dist/main/lib/fetch.js:95:18)
-    at async GoTrueAdminApi.updateUserById (/Users/sivapriya/Documents/vs_code_files/Semester 05 project/course-platform-backend/node_modules/@supabase/auth-js/dist/main/GoTrueAdminApi.js:202:20)
-    at async file:///Users/sivapriya/Documents/vs_code_files/Semester%2005%20project/course-platform-backend/routes/auth.js:511:29 {
-  __isAuthError: true,
-  status: 422,
-  code: 'weak_password',
-  reasons: [ 'length' ]
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+Fetching profile for instructor: test-instructor-123
+Database query result: {
+  data: [
+    {
+      id: 'ef3ce894-31d8-4fc0-933e-bfe6409fd2fd',
+      instructor_id: 'test-instructor-123',
+      email: 'test@instructor.com',
+      name: 'Test Instructor',
+      bio: 'Sample instructor profile for testing',
+      profile_image_url: null,
+      expertise: null,
+      phone: null,
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T03:46:48.207396+00:00',
+      updated_at: '2025-10-03T03:46:48.207396+00:00'
+    }
+  ],
+  error: null
 }
-❌ /update-password error: Password should be at least 6 characters.
-🔄 Updating password for user: 9712e0e0-f605-4fb5-8aa1-39c376f5d682
-✅ Password updated successfully for user: 9712e0e0-f605-4fb5-8aa1-39c376f5d682
-🔔 /reset-password called with: newuser@example.com
-✅ resetPasswordForEmail response: {}
-🔔 /reset-password called with: newuser@example.com
-✅ resetPasswordForEmail response: {}
-❌ /update-password error: Invalid or expired reset token.
+Profile retrieved: {
+  instructor_id: 'test-instructor-123',
+  email: 'test@instructor.com',
+  has_profile_image: false
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
+Updating profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3 {
+  name: 'wdw',
+  email: 'sivapragasampriya01@gmail.com',
+  bio: 'wqdfwe',
+  phone: '+94 743148389',
+  website: '',
+  expertise: [ 'wveweve34' ]
+}
+Database error: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'Cannot coerce the result to a single JSON object'
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+Updating profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3 {
+  name: 'wdw',
+  email: 'sivapragasampriya01@gmail.com',
+  bio: 'wqdfwe',
+  phone: '+94 743148389',
+  website: '',
+  expertise: [ 'wveweve34' ]
+}
+Database error: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'Cannot coerce the result to a single JSON object'
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: { data: [], error: null }
+Creating new instructor profile for: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  has_profile_image: false
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+      name: 'Instructor 46f500b7-9e44-43db-b846-a83a10cf20d3',
+      bio: 'Welcome to my profile!',
+      profile_image_url: null,
+      expertise: null,
+      phone: null,
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:36:07.320394+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  has_profile_image: false
+}
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+      name: 'Instructor 46f500b7-9e44-43db-b846-a83a10cf20d3',
+      bio: 'Welcome to my profile!',
+      profile_image_url: null,
+      expertise: null,
+      phone: null,
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:36:07.320394+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  has_profile_image: false
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+      name: 'Instructor 46f500b7-9e44-43db-b846-a83a10cf20d3',
+      bio: 'Welcome to my profile!',
+      profile_image_url: null,
+      expertise: null,
+      phone: null,
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:36:07.320394+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  has_profile_image: false
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
+Updating profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3 {
+  name: 'Instructor 46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  bio: 'Welcome to my profile!',
+  phone: '',
+  website: '',
+  expertise: []
+}
+Updating existing profile for: 46f500b7-9e44-43db-b846-a83a10cf20d3
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+      name: 'Instructor 46f500b7-9e44-43db-b846-a83a10cf20d3',
+      bio: 'Welcome to my profile!',
+      profile_image_url: null,
+      expertise: [],
+      phone: null,
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:36:30.823459+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  has_profile_image: false
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+Updating profile for instructor: test-instructor-123 {
+  name: 'Updated Test Instructor',
+  email: 'updated@test.com',
+  bio: 'This is an updated bio from the API test!',
+  phone: '+1-555-123-4567',
+  website: 'https://example.com',
+  expertise: [ 'JavaScript', 'Node.js', 'React' ]
+}
+Updating existing profile for: test-instructor-123
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+Updating profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3 {
+  name: 'Instructor 46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  bio: 'Welcome to my profile!',
+  phone: '',
+  website: '',
+  expertise: []
+}
+Updating existing profile for: 46f500b7-9e44-43db-b846-a83a10cf20d3
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+      name: 'Instructor 46f500b7-9e44-43db-b846-a83a10cf20d3',
+      bio: 'Welcome to my profile!',
+      profile_image_url: null,
+      expertise: [],
+      phone: null,
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:36:59.739491+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  has_profile_image: false
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+      name: 'Instructor 46f500b7-9e44-43db-b846-a83a10cf20d3',
+      bio: 'Welcome to my profile!',
+      profile_image_url: null,
+      expertise: [],
+      phone: null,
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:36:59.739491+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  has_profile_image: false
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 observe env with Radar: https://dotenvx.com/radar
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+      name: 'Instructor 46f500b7-9e44-43db-b846-a83a10cf20d3',
+      bio: 'Welcome to my profile!',
+      profile_image_url: null,
+      expertise: [],
+      phone: null,
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:36:59.739491+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: '46f500b7-9e44-43db-b846-a83a10cf20d3@instructor.com',
+  has_profile_image: false
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+Uploading to Digital Ocean with params: {
+  Bucket: 'onlinelearningplatform',
+  Key: 'images/instructor-profiles/instructor-46f500b7-9e44-43db-b846-a83a10cf20d3-1759466240809.png',
+  ContentType: 'image/png',
+  FileSize: 254545
+}
+Upload successful: https://onlinelearningplatform.sgp1.digitaloceanspaces.com/images/instructor-profiles/instructor-46f500b7-9e44-43db-b846-a83a10cf20d3-1759466240809.png
+Profile image uploaded and database updated successfully
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+Updating profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3 {
+  name: 'sivapriya sivapragasam ',
+  email: 'sivapragasampriya01@gmail.com',
+  bio: 'Welcome to my profile!',
+  phone: '+94 743148389',
+  website: '',
+  expertise: []
+}
+Updating existing profile for: 46f500b7-9e44-43db-b846-a83a10cf20d3
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: 'sivapragasampriya01@gmail.com',
+      name: 'sivapriya sivapragasam ',
+      bio: 'Welcome to my profile!',
+      profile_image_url: 'https://onlinelearningplatform.sgp1.digitaloceanspaces.com/images/instructor-profiles/instructor-46f500b7-9e44-43db-b846-a83a10cf20d3-1759466240809.png',
+      expertise: [],
+      phone: '+94 743148389',
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:37:38.472752+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: 'sivapragasampriya01@gmail.com',
+  has_profile_image: true
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: 'sivapragasampriya01@gmail.com',
+      name: 'sivapriya sivapragasam ',
+      bio: 'Welcome to my profile!',
+      profile_image_url: 'https://onlinelearningplatform.sgp1.digitaloceanspaces.com/images/instructor-profiles/instructor-46f500b7-9e44-43db-b846-a83a10cf20d3-1759466240809.png',
+      expertise: [],
+      phone: '+94 743148389',
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:37:38.472752+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: 'sivapragasampriya01@gmail.com',
+  has_profile_image: true
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: 'sivapragasampriya01@gmail.com',
+      name: 'sivapriya sivapragasam ',
+      bio: 'Welcome to my profile!',
+      profile_image_url: 'https://onlinelearningplatform.sgp1.digitaloceanspaces.com/images/instructor-profiles/instructor-46f500b7-9e44-43db-b846-a83a10cf20d3-1759466240809.png',
+      expertise: [],
+      phone: '+94 743148389',
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:37:38.472752+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: 'sivapragasampriya01@gmail.com',
+  has_profile_image: true
+}
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+Updating profile for instructor: test-instructor-123 { name: 'Updated Name', email: 'test@example.com' }
+Updating existing profile for: test-instructor-123
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+Fetching profile for instructor: 46f500b7-9e44-43db-b846-a83a10cf20d3
+Database query result: {
+  data: [
+    {
+      id: '7381db16-8737-4a63-bdf1-a04cc6172ad8',
+      instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+      email: 'sivapragasampriya01@gmail.com',
+      name: 'sivapriya sivapragasam ',
+      bio: 'Welcome to my profile!',
+      profile_image_url: 'https://onlinelearningplatform.sgp1.digitaloceanspaces.com/images/instructor-profiles/instructor-46f500b7-9e44-43db-b846-a83a10cf20d3-1759466240809.png',
+      expertise: [],
+      phone: '+94 743148389',
+      website: null,
+      social_links: {},
+      created_at: '2025-10-03T04:36:07.320394+00:00',
+      updated_at: '2025-10-03T04:37:38.472752+00:00'
+    }
+  ],
+  error: null
+}
+Profile retrieved: {
+  instructor_id: '46f500b7-9e44-43db-b846-a83a10cf20d3',
+  email: 'sivapragasampriya01@gmail.com',
+  has_profile_image: true
+}
