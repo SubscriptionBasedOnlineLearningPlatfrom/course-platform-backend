@@ -1,7 +1,7 @@
 import { supabase } from "../../config/supabaseClient.js";
 
 export async function createCourseProgress(studentId, courseId) {
-  //get all modules for the given course
+  // get all modules for the given course
   const { data: modules, error: modulesError } = await supabase
     .from("modules")
     .select("module_id")
@@ -10,18 +10,36 @@ export async function createCourseProgress(studentId, courseId) {
   if (modulesError) throw modulesError;
   if (!modules || modules.length === 0) throw new Error("No modules found for this course");
 
-  // build progress records
-  const progressRecords = modules.map((m) => ({
-    student_id: studentId,
-    course_id: courseId,
-    module_id: m.module_id,
-    is_completed: false,
-  }));
+  // get existing progress for this student + course
+  const { data: existingProgress, error: existingError } = await supabase
+    .from("course_progress")
+    .select("module_id")
+    .eq("student_id", studentId)
+    .eq("course_id", courseId);
 
-  // insert into course_progress
+  if (existingError) throw existingError;
+
+  const existingModuleIds = existingProgress?.map(p => p.module_id) || [];
+
+  // filter modules that are not already in progress table
+  const newProgressRecords = modules
+    .filter(m => !existingModuleIds.includes(m.module_id))
+    .map(m => ({
+      student_id: studentId,
+      course_id: courseId,
+      module_id: m.module_id,
+      is_completed: false,
+    }));
+
+  if (newProgressRecords.length === 0) {
+    //all modules already have progress rows
+    return { message: "Progress already initialized for all modules" };
+  }
+
+  //insert missing progress records
   const { data, error } = await supabase
     .from("course_progress")
-    .insert(progressRecords);
+    .insert(newProgressRecords);
 
   if (error) throw error;
   return data;
