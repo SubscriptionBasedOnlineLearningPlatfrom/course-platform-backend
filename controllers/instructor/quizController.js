@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { supabase } from "../../config/supabaseClient.js";
-import { editQuizModel, loadQuizModel, quizCreationModel } from "../../models/instructor/quizModel.js";
+import { deleteAnswer, deleteQuestion, editQuizModel, loadQuizModel, quizCreationModel } from "../../models/instructor/quizModel.js";
 
 const NormalizedQuestion = z.object({
   question_text: z.string().min(1),
@@ -44,7 +44,7 @@ export const loadQuiz = async (req, res) => {
   try {
     const lessonId = req.params.lessonId;
     const full = await loadQuizModel(lessonId);
-    console.log(full)
+    
     return res.json(full);
 
   } catch (error) {
@@ -69,6 +69,26 @@ export const editQuiz = async (req, res) => {
     return res.json({ message: "Quiz updated successfully" });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+export const deleteQues = async (req,res) => {
+  const questionId = req.params.questionId;
+  try {
+    const data = await deleteQuestion(questionId);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const deleteAns = async (req,res) => {
+  const answerId = req.params.answerId;
+  console.log(answerId)
+  try {
+    const data = deleteAnswer(answerId);
+  } catch (error) {
+    console.log(error)
     res.status(500).json({ error: err.message });
   }
 }
