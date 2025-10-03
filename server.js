@@ -18,6 +18,11 @@ import courseRoutes from './routes/instructor/courseRoutes.js';
 import profileRouter from './routes/instructor/profileRoutes.js';
 import authRoutes from "./routes/auth.js";
 import dashboardRouter from "./routes/student/dashboardRouter.js";
+import authRouter from "./routes/student/authRoute.js";
+import subscriptionRoute from "./routes/student/subscriptionRoute.js";
+import quizRouter from "./routes/student/quizRoute.js";
+import profileRoute from "./routes/student/profileRoute.js";
+import courseContentRoutes from "./routes/student/courseContentRoutes.js";
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
 
@@ -44,7 +49,7 @@ app.use(session({
 
 // Initialize Passport
 app.use(passport.initialize());
-
+app.use(passport.session()); 
 // -------------------- ROUTES --------------------
 app.get("/", (req, res) => {
   res.send("✅ Server running. Go to /signup or /login");
@@ -66,16 +71,22 @@ app.use("/instructor/profile", profileRouter);
 // students
 app.use("/student/courses", courseRouter);
 app.use('/student/dashboard', dashboardRouter);
+app.use('/student/auth', authRouter);
+app.use('/student/subscription', subscriptionRoute);
+app.use("/student/quizzes", quizRouter);
+app.use("/student/profile", profileRoute);
+app.use('/student/course', courseContentRoutes);
+
 // Routes
 app.use("/auth", authRoutes);
 
 // app.use("/auth", authRoutes); // signup, login, dashboard
 
 // -------------------- ERROR HANDLER --------------------
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Something went wrong!" });
-});
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).json({ error: "Something went wrong!" });
+// });
 
 // -------------------- START SERVER --------------------
 const PORT = process.env.PORT || 4000;
