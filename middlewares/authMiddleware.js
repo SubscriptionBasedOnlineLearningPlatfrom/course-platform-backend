@@ -80,7 +80,6 @@ export const studentAuth = (req, res, next) => {
     req.studentId = studentId;
     return next();
   } catch (err) {
-    console.log(err)
     return res.status(401).json({ error: "Invalid or expired token", details: err.message });
   }
 };
