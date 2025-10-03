@@ -182,34 +182,58 @@ export const CourseController = {
   async deleteCourse(req, res) {
     try {
       const { courseId } = req.params;
-      const instructorId = req.user.instructor_id;
+      console.log("Delete request received for courseId:", courseId);
+      console.log("User from req.user:", req.user);
+      
+      const instructorId = req.user?.instructor_id;
+      console.log("Instructor ID:", instructorId);
 
       if (!courseId) {
+        console.log("Error: Course ID is missing");
         return res.status(400).json({
           success: false,
           error: "Course ID is required",
         });
       }
 
+      if (!instructorId) {
+        console.log("Error: Instructor ID is missing from user");
+        return res.status(400).json({
+          success: false,
+          error: "Instructor authentication required",
+        });
+      }
+
       // First, verify that the course belongs to the instructor
+      console.log("Fetching course data for courseId:", courseId);
       const courseResult = await CourseModel.getCourseById(courseId);
+      console.log("Course fetch result:", courseResult);
+      
       if (!courseResult.success) {
+        console.log("Error: Course not found");
         return res.status(404).json({
           success: false,
           error: "Course not found",
         });
       }
 
+      console.log("Course instructor_id:", courseResult.data.instructor_id);
+      console.log("Current user instructor_id:", instructorId);
+      
       if (courseResult.data.instructor_id !== instructorId) {
+        console.log("Error: Permission denied - course doesn't belong to instructor");
         return res.status(403).json({
           success: false,
           error: "You don't have permission to delete this course",
         });
       }
 
+      console.log("Attempting to delete course:", courseId);
       const result = await CourseModel.deleteCourse(courseId);
+      console.log("Delete result:", result);
 
       if (!result.success) {
+        console.log("Error: Delete operation failed:", result.error);
         return res.status(400).json({
           success: false,
           error: result.error,
