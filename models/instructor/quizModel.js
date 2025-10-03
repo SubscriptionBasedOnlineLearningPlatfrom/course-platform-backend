@@ -8,7 +8,6 @@ export const quizCreationModel = async (lesson_id, quiz_title, questions) => {
     })
     
     if (error) {
-        console.log(error);
         throw new Error(error.message);
     }
 
@@ -35,7 +34,6 @@ export const loadQuizModel = async (lessonId) => {
         .eq('lesson_id', lessonId);    
 
     if (quizError) {
-        console.log(quizError)
         throw new Error(quizError.message);
     }
     
@@ -100,7 +98,6 @@ export const deleteAnswer = async (answer_id) => {
                                 .eq('answer_id', answer_id)
                                 .select();
 
-    console.log(data)
     if(error){
         throw new Error(error.message);
     }

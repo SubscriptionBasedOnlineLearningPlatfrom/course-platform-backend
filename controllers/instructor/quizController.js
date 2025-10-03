@@ -23,7 +23,6 @@ export const quizCreation = async (req, res) => {
     const lessionId = req.params.lessonId;
     const parsed = QuizSchema.safeParse(req.body);
 
-    console.log(lessionId)
 
     if (!parsed.success) {
       return res.status(400).json({ error: parsed.error });
@@ -34,7 +33,6 @@ export const quizCreation = async (req, res) => {
     return res.status(201).json({ quiz_id: data });
 
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: "Internal Server Error : ", details: error.message });
   }
 }
@@ -48,7 +46,6 @@ export const loadQuiz = async (req, res) => {
     return res.json(full);
 
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: "Internal Server Error : ", details: error.message });
   }
 }
@@ -84,11 +81,9 @@ export const deleteQues = async (req,res) => {
 
 export const deleteAns = async (req,res) => {
   const answerId = req.params.answerId;
-  console.log(answerId)
   try {
     const data = deleteAnswer(answerId);
   } catch (error) {
-    console.log(error)
     res.status(500).json({ error: err.message });
   }
 }
