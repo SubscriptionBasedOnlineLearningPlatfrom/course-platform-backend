@@ -6,6 +6,7 @@ import { studentAuth } from '../../middlewares/authMiddleware.js';
 const courseRouter = express.Router();
 
 courseRouter.get('/:courseId', courseDetails);
+courseRouter.post('/enrollment',studentAuth, enrollment);
 courseRouter.get("/check-enrollment/:courseId",studentAuth, checkCourseEnrollment);
 courseRouter.get("/related-courses/:category",fetchRelatedCourses);
 courseRouter.get("/", fetchCourses);

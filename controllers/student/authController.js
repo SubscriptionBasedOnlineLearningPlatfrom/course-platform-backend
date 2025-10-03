@@ -2,6 +2,8 @@ import { z } from "zod";
 import { supabase } from "../../config/supabaseClient.js";
 import { signJwt } from "../../utils/jwt.js";
 import { findUserByEmail, createUser } from "../../models/student/authModel.js";
+import { transporter } from "../../config/nodemailer.js";
+import { registerEmail } from "../../email-formats/register.js";
 
 export const registerSchema = z.object({
     username: z.string().min(2).max(50),
@@ -34,10 +36,18 @@ export const register = async (req, res) => {
         const student = await createUser({ username, email, password });
         const studentToken = signJwt({ id: student.student_id, username: student.username, email: student.email });
 
+        const mailOptions = {
+            from: process.env.ADMIN_EMAIL,
+            to: student.email,
+            subject: 'Registration Successful – Welcome to the Online Learning Platform!',
+            html: registerEmail(student.username)
+        };
+
+        await transporter.sendMail(mailOptions);
+
         res.json({ message: "Signup successful", studentToken });
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 
@@ -46,11 +56,9 @@ export const register = async (req, res) => {
 export const loginSuccess = async (req, res) => {
     try {
         const user = req.user;
-        console.log(user);
         const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
         res.json({ message: "Login successful", studentToken });
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 
@@ -59,7 +67,6 @@ export const loginSuccess = async (req, res) => {
 export const googleCallback = async (req, res) => {
     try {
         const user = req.student;
-        console.log(user);
         const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
         res.redirect(`${process.env.FRONTEND_URL}/dashboard?studentToken=${studentToken}`);
     } catch (error) {

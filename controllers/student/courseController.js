@@ -1,3 +1,6 @@
+import { transporter } from "../../config/nodemailer.js";
+import { courseEnrollmentEmail } from "../../email-formats/courseEnrollment.js";
+import { findUserById } from "../../models/student/authModel.js";
 import { courseDetailsByCourseId, commentsReplies, createEnrollment, getRelatedCourses, createComment, createReply, checkEnrollment } from "../../models/student/courseModel.js";
 import { z } from 'zod';
 
@@ -20,14 +23,21 @@ const enrollmentSchema = z.object({
 // create a enrollment
 export const enrollment = async (req, res) => {
     try {
-        const parsed = enrollmentSchema.safeParse(req.body);
-
-        if (!parsed.success) {
-            return res.status(400).json({ error: parsed.error })
-        }
-
-        const { course_id, student_id } = parsed.data;
+        const student_id = req.studentId;
+        const course_id = req.body.course_id;
+        const student =await findUserById(student_id);
+        const {course} =await courseDetailsByCourseId(course_id);
         const data = await createEnrollment(course_id, student_id);
+        // Usage
+        const mailOptions = {
+            from: process.env.ADMIN_EMAIL,
+            to: student.email,
+            subject: `Enrollment Successful – ${course.course_title}`,
+            html: courseEnrollmentEmail(student.username, course.course_title)
+        };
+
+        await transporter.sendMail(mailOptions);
+        
         return res.status(200).json(data);
 
     } catch (error) {
@@ -54,7 +64,6 @@ export const checkCourseEnrollment = async (req, res) => {
         res.json({ isEnrolled })
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 }
@@ -87,14 +96,12 @@ export const viewCommentsWithReplies = async (req, res) => {
 export const postComment = async (req, res) => {
     try {
         const student_id = req.studentId;
-        console.log(student_id);
         const course_id = req.params.courseId;
         const { rating, comment_text } = req.body;
         const data = await createComment(course_id, student_id, rating, comment_text);
         return res.status(200).json(data);
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 }
@@ -109,7 +116,6 @@ export const postReply = async (req, res) => {
 
     }
     catch (error) {
-        console.log(error)
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 }

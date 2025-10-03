@@ -45,8 +45,7 @@ export const changeSubscriptionPlan = async (student_id, transaction_id, plan) =
       plan: plan
     })
     .eq("student_id", student_id)
-    .select()
-    .single();
+    .select();
 
 
   if (error) {

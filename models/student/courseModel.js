@@ -35,7 +35,7 @@ export const courseDetailsByCourseId = async (courseId) => {
 export const createEnrollment = async (course_id, student_id) => {
     const { data, error } = await supabase
         .from('enrollments')
-        .insert({ course_id, student_id })
+        .insert([{ course_id, student_id }])
         .select("*")
         .single();
 
