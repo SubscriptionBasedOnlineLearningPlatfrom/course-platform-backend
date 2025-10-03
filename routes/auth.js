@@ -217,10 +217,6 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import passport from "passport";
-
-import { Strategy as LocalStrategy } from "passport-local";
-import { Strategy as GoogleStrategy } from "passport-google-oidc";
-import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { createClient } from "@supabase/supabase-js";
 
 import dotenv from "dotenv";
@@ -233,109 +229,8 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY // ✅ must be service role, not anon
 );
-// const supabaseAdmin = createClient(
-//    process.env.SUPABASE_URL,
-//  process.env.SUPABASE_SERVICE_ROLE_KEY
-// )
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
-
-// -------------------- PASSPORT STRATEGIES --------------------
-
-// Local Strategy (login with email + password)
-passport.use(
-  new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
-    try {
-      const { data: user, error } = await supabase
-        .from("instructors")
-        .select("*")
-        .eq("email", email)
-        .single();
-
-      if (error || !user) return done(null, false, { message: "Invalid email" });
-
-      const validPassword = await bcrypt.compare(password, user.password_hash);
-      if (!validPassword) return done(null, false, { message: "Invalid password" });
-
-      return done(null, user);
-    } catch (err) {
-      return done(err);
-    }
-  })
-);
-
-// JWT Strategy
-passport.use(
-  new JwtStrategy(
-    {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: JWT_SECRET,
-    },
-    async (jwtPayload, done) => {
-      try {
-        const { data: user, error } = await supabase
-          .from("instructors")
-          .select("*")
-          .eq("instructor_id", jwtPayload.id)
-          .single();
-          console.log("Hi")
-          console.log(user);
-
-        if (error || !user) return done(null, false);
-
-        return done(null, user);
-      } catch (err) {
-        return done(err, false);
-      }
-    }
-  )
-);
-
-// Google Strategy
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
-      scope: ["profile", "email"],
-    },
-    async (issuer, profile, cb) => {
-      try {
-        // Check if user exists
-        const { data: user } = await supabase
-          .from("instructors")
-          .select("*")
-          .eq("email", profile.emails[0].value)
-          .single();
-
-        console.log(user);
-
-        if (user) return cb(null, user);
-
-        // Insert new instructor
-        const { data: newUser, error: insertError } = await supabase
-          .from("instructors")
-          .insert([
-            {
-              username: profile.displayName,
-              email: profile.emails[0].value,
-              password_hash: "", // Google login → no password
-            },
-          ])
-          .select()
-          .single();
-
-        if (insertError) return cb(insertError);
-
-        return cb(null, newUser);
-      } catch (err) {
-        console.error("Signup/Login error:", err); // This will show the real error in your terminal
-        res.status(500).json({ error: err.message || "Something went wrong!" });
-      }
-    }
-  )
-);
 
 // -------------------- ROUTES --------------------
 

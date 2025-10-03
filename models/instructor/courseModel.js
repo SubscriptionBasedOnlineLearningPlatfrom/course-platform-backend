@@ -101,18 +101,24 @@ export const CourseModel = {
     }
   },
 
-  // Delete a course
+  // Delete a course (simplified version for debugging)
   async deleteCourse(courseId) {
     try {
+      console.log("Starting simple course deletion for courseId:", courseId);
+      
+      // Just delete the course directly without .select() to avoid iteration issues
       const { data, error } = await supabase
         .from("courses")
         .delete()
-        .eq("course_id", courseId)
-        .select()
-        .single();
+        .eq("course_id", courseId);
 
-      if (error) throw error;
-      return { success: true, data };
+      if (error) {
+        console.error("Error deleting course:", error);
+        throw error;
+      }
+      
+      console.log("Course deleted successfully, affected rows:", data);
+      return { success: true, data: { courseId, deleted: true } };
     } catch (error) {
       console.error("Error deleting course:", error);
       return { success: false, error: error.message };

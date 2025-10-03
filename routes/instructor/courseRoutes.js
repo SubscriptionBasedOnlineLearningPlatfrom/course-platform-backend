@@ -20,6 +20,26 @@ router.get("/test", (req, res) => {
   });
 });
 
+// Test delete route without auth for debugging
+router.delete("/test/:courseId", async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    console.log("Test delete route called with courseId:", courseId);
+    
+    const { CourseModel } = await import("../../models/instructor/courseModel.js");
+    const result = await CourseModel.deleteCourse(courseId);
+    
+    console.log("Test delete result:", result);
+    res.json(result);
+  } catch (error) {
+    console.error("Test delete error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 // Test route to check database structure (no auth required)
 router.get("/test/structure", async (req, res) => {
   try {
