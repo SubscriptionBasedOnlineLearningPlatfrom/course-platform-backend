@@ -6,11 +6,25 @@ export const quizCreationModel = async (lesson_id, quiz_title, questions) => {
         quiz_title: quiz_title,
         questions: questions
     })
-
+    
     if (error) {
+        console.log(error);
         throw new Error(error.message);
     }
 
+    return data;
+}
+
+export const editQuizModel = async (quizId,quiz_title,questions) => {
+    const { data, error } = await supabase.rpc("modify_quiz", {
+      p_quiz_id: quizId,
+      p_quiz_title: quiz_title,
+      p_questions: questions,
+    });
+
+    if (error){
+        throw new Error(quizError.message);
+    }
     return data;
 }
 
@@ -21,6 +35,7 @@ export const loadQuizModel = async (lessonId) => {
         .eq('lesson_id', lessonId);
 
     if (quizError) {
+        console.log(quizError)
         throw new Error(quizError.message);
     }
 
@@ -51,5 +66,5 @@ export const loadQuizModel = async (lessonId) => {
         correctAnswer: (answers || []).filter(a => a.question_id === q.question_id).findIndex(a => a.is_correct)
     }))
 
-    return full;
+    return {quiz,full};
 }
