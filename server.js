@@ -1,10 +1,8 @@
 import express from "express";
 import passport from "passport";
 import cors from "cors";
-// import session from "express-session"; // optional if you use sessions, not needed for JWT only
 import dotenv from "dotenv";
 import 'dotenv/config';
-// import cookieParser from "cookie-parser";
 import session from "express-session";
 // import cookieParser from "cookie-parser";
 // import { supabase } from "./Database/SupabaseClient.js";
