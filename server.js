@@ -15,6 +15,7 @@ import courseRouter from "./routes/student/courseRouter.js";
 import moduleRoutes from './routes/instructor/moduleRoutes.js';
 import chapterRoutes from './routes/instructor/chapterRoutes.js';
 import courseRoutes from './routes/instructor/courseRoutes.js';
+import profileRouter from './routes/instructor/profileRoutes.js';
 import authRoutes from "./routes/auth.js";
 import dashboardRouter from "./routes/student/dashboardRouter.js";
 import authRouter from "./routes/student/authRoute.js";
@@ -52,7 +53,12 @@ app.use(passport.session());
 // -------------------- ROUTES --------------------
 app.get("/", (req, res) => {
   res.send("✅ Server running. Go to /signup or /login");
-  
+});
+
+// Direct test route for Digital Ocean
+app.get("/test-simple", (req, res) => {
+  console.log("Simple test route hit!");
+  res.json({ message: "Simple test route working", timestamp: new Date().toISOString() });
 });
 app.use("/instructor/overview", OverviewRouter);
 app.use("/instructor/comments", commentRouter);
@@ -60,6 +66,7 @@ app.use("/instructor/quizzes", QuizRouter);
 app.use("/instructor/modules", moduleRoutes);
 app.use("/instructor/chapters", chapterRoutes);
 app.use("/instructor/courses", courseRoutes);
+app.use("/instructor/profile", profileRouter);
 
 // students
 app.use("/student/courses", courseRouter);

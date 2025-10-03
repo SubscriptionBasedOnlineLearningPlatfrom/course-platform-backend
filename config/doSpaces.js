@@ -7,7 +7,9 @@ dotenv.config();
 export const s3 = new AWS.S3({
   endpoint: new AWS.Endpoint(process.env.DO_SPACES_ENDPOINT),
   accessKeyId: process.env.DO_SPACES_KEY,
-  secretAccessKey: process.env.DO_SPACES_SECRET
+  secretAccessKey: process.env.DO_SPACES_SECRET,
+  region: process.env.DO_SPACES_REGION || 'sgp1',
+  signatureVersion: 'v4'
 });
 
 //   region: "nyc3", // replace with your Space region
