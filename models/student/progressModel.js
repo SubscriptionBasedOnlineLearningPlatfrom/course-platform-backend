@@ -46,7 +46,7 @@ export async function createCourseProgress(studentId, courseId) {
 }
 
 
-//Update the progress of a module for a student
+//update the progress of a module for a student
 export async function updateProgress(studentId, moduleId, isCompleted) {
   const { data, error } = await supabase
     .from("course_progress")
@@ -62,3 +62,69 @@ export async function updateProgress(studentId, moduleId, isCompleted) {
   return data;
 }
 
+
+//fetch progress for a student in a course
+export async function getCourseProgress(studentId, courseId) {
+  //get all modules for the course
+  const { data: modules, error: modulesError } = await supabase
+    .from("modules")
+    .select("module_id, module_title")
+    .eq("course_id", courseId);
+
+  if (modulesError) throw new Error(modulesError.message);
+
+  //get student's progress records 
+  const { data: progress, error: progressError } = await supabase
+    .from("course_progress")
+    .select("module_id, is_completed, updated_at")
+    .eq("course_id", courseId)
+    .eq("student_id", studentId);
+
+  if (progressError) throw new Error(progressError.message);
+
+  //detect missing modules
+  const progressModuleIds = progress.map((p) => p.module_id);
+  const missingModules = modules.filter(
+    (m) => !progressModuleIds.includes(m.module_id)
+  );
+
+  //insert missing records into course_progress
+  if (missingModules.length > 0) {
+    const inserts = missingModules.map((m) => ({
+      course_id: courseId,
+      student_id: studentId,
+      module_id: m.module_id,
+      is_completed: false,
+      updated_at: null,
+    }));
+
+    const { error: insertError } = await supabase
+      .from("course_progress")
+      .insert(inserts);
+
+    if (insertError) throw new Error(insertError.message);
+
+    //re-fetch updated progress 
+    const { data: refreshed, error: refreshedError } = await supabase
+      .from("course_progress")
+      .select("module_id, is_completed, updated_at")
+      .eq("course_id", courseId)
+      .eq("student_id", studentId);
+
+    if (refreshedError) throw new Error(refreshedError.message);
+    progress.splice(0, progress.length, ...refreshed); // overwrite old array
+  }
+
+  //build final array
+  const result = modules.map((m) => {
+    const found = progress.find((p) => p.module_id === m.module_id);
+    return {
+      id: m.module_id,
+      name: m.module_title,
+      completed: found ? found.is_completed : false,
+      dateCompleted: found && found.is_completed ? found.updated_at : null,
+    };
+  });
+
+  return result;
+}
