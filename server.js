@@ -56,10 +56,10 @@ app.get("/", (req, res) => {
 });
 
 // Direct test route for Digital Ocean
-app.get("/test-simple", (req, res) => {
-  console.log("Simple test route hit!");
-  res.json({ message: "Simple test route working", timestamp: new Date().toISOString() });
-});
+// app.get("/test-simple", (req, res) => {
+//   console.log("Simple test route hit!");
+//   res.json({ message: "Simple test route working", timestamp: new Date().toISOString() });
+// });
 app.use("/instructor/overview", OverviewRouter);
 app.use("/overview", OverviewRouter); // General overview route for frontend compatibility
 app.use("/instructor/comments", commentRouter);
