@@ -63,8 +63,27 @@ export async function updateProgress(studentId, moduleId, isCompleted) {
 }
 
 
-//fetch progress for a student in a course
+
+// fetch progress for a student in a course
 export async function getCourseProgress(studentId, courseId) {
+  //fetch student username
+  const { data: studentData, error: studentError } = await supabase
+    .from("students")
+    .select("username")
+    .eq("student_id", studentId)
+    .single();
+
+  if (studentError) throw new Error(studentError.message);
+
+  //fetch course title
+  const { data: courseData, error: courseError } = await supabase
+    .from("courses")
+    .select("course_title")
+    .eq("course_id", courseId)
+    .single();
+
+  if (courseError) throw new Error(courseError.message);
+
   //get all modules for the course
   const { data: modules, error: modulesError } = await supabase
     .from("modules")
@@ -73,7 +92,7 @@ export async function getCourseProgress(studentId, courseId) {
 
   if (modulesError) throw new Error(modulesError.message);
 
-  //get student's progress records 
+  //get student's progress records
   const { data: progress, error: progressError } = await supabase
     .from("course_progress")
     .select("module_id, is_completed, updated_at")
@@ -104,7 +123,7 @@ export async function getCourseProgress(studentId, courseId) {
 
     if (insertError) throw new Error(insertError.message);
 
-    //re-fetch updated progress 
+    //re-fetch updated progress
     const { data: refreshed, error: refreshedError } = await supabase
       .from("course_progress")
       .select("module_id, is_completed, updated_at")
@@ -115,8 +134,8 @@ export async function getCourseProgress(studentId, courseId) {
     progress.splice(0, progress.length, ...refreshed); // overwrite old array
   }
 
-  //build final array
-  const result = modules.map((m) => {
+  // build final array
+  const modulesWithProgress = modules.map((m) => {
     const found = progress.find((p) => p.module_id === m.module_id);
     return {
       id: m.module_id,
@@ -126,5 +145,9 @@ export async function getCourseProgress(studentId, courseId) {
     };
   });
 
-  return result;
+  return {
+    studentName: studentData.username,
+    courseTitle: courseData.course_title,
+    modules: modulesWithProgress,
+  };
 }
