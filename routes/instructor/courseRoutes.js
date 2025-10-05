@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
 import { CourseController } from "../../controllers/instructor/courseController.js";
+import { upload } from "../../config/doSpaces.js";
 
 const router = express.Router();
 
@@ -60,7 +61,7 @@ router.get("/test/structure", async (req, res) => {
 });
 
 // Course routes for instructors - using proper JWT authentication
-router.post("/", requireAuth, CourseController.createCourse);
+router.post("/", requireAuth, upload.single('thumbnail'), CourseController.createCourse);
 router.get("/", requireAuth, CourseController.getInstructorCourses);
 router.get("/:courseId", requireAuth, CourseController.getCourseById);
 router.put("/:courseId", requireAuth, CourseController.updateCourse);

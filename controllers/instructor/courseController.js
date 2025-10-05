@@ -15,6 +15,23 @@ export const CourseController = {
         });
       }
 
+      // Handle thumbnail upload if provided
+      let thumbnailUrl = null;
+      if (req.file) {
+        const { uploadCourseThumbnail } = await import("../../utils/courseThumbnailUpload.js");
+        const uploadResult = await uploadCourseThumbnail(req.file, instructorId);
+        
+        if (!uploadResult.success) {
+          return res.status(400).json({
+            success: false,
+            error: "Failed to upload thumbnail: " + uploadResult.error,
+          });
+        }
+        
+        thumbnailUrl = uploadResult.url;
+        console.log('✅ Course thumbnail uploaded:', thumbnailUrl);
+      }
+
       // Validate duration if provided
       let validatedDuration = null;
       if (duration !== undefined && duration !== null && duration !== "") {
@@ -39,6 +56,7 @@ export const CourseController = {
         level: normalizedLevel, // Use the normalized level
         duration: validatedDuration,
         requirements,
+        thumbnail_url: thumbnailUrl, // Add thumbnail URL
       };
 
       const result = await CourseModel.createCourse(courseData);
