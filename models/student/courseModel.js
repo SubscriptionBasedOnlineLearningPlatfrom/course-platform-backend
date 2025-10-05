@@ -1,10 +1,68 @@
 import { supabase } from "../../config/supabaseClient.js";
 
 // Fetch all courses
-export const getAllCourses = async () => {
-    const { data, error } = await supabase.from("courses").select("*");
+export const getAllCourses = async (searchQuery = null) => {
+    let query = supabase.from("courses").select("*");
+    
+    if (searchQuery) {
+        // Search for courses that START WITH the typed letters
+        query = query.or(`course_title.ilike.${searchQuery}%,category.ilike.${searchQuery}%`);
+    }
+    
+    const { data, error } = await query;
     if (error) throw error;
     return data;
+};
+
+// Fetch courses with real ratings calculated from comments
+export const getCoursesWithRealRatings = async () => {
+    const { data, error } = await supabase
+        .from("courses")
+        .select(`
+            *,
+            comments (rating)
+        `);
+    
+    if (error) throw error;
+    
+    // Calculate average rating for each course
+    const coursesWithRatings = data.map(course => {
+        const ratings = course.comments || [];
+        let averageRating = 0;
+        let totalComments = ratings.length;
+        
+        if (totalComments > 0) {
+            const sum = ratings.reduce((acc, comment) => acc + (comment.rating || 0), 0);
+            averageRating = sum / totalComments;
+        }
+        
+        return {
+            ...course,
+            real_rating: Math.round(averageRating * 10) / 10, // Round to 1 decimal place
+            comment_count: totalComments,
+            comments: undefined // Remove comments array to keep response clean
+        };
+    });
+    
+    return coursesWithRatings;
+};
+
+// Get featured courses based on real ratings (top 3 highest rated)
+export const getFeaturedCourses = async () => {
+    const coursesWithRatings = await getCoursesWithRealRatings();
+    
+    // Sort by real rating (desc) and comment count (desc) as tiebreaker
+    const sortedCourses = coursesWithRatings
+        .filter(course => course.comment_count > 0) // Only courses with comments
+        .sort((a, b) => {
+            if (b.real_rating !== a.real_rating) {
+                return b.real_rating - a.real_rating;
+            }
+            return b.comment_count - a.comment_count;
+        });
+    
+    // Return top 3 courses, or fallback to any 3 courses if none have ratings
+    return sortedCourses.length >= 3 ? sortedCourses.slice(0, 3) : coursesWithRatings.slice(0, 3);
 };
 
 //get course details by courseId
