@@ -24,6 +24,7 @@ export const CourseModel = {
             rating: 0, // Default rating for new courses
             duration: courseData.duration, // Already validated and converted in controller
             requirements: courseData.requirements || null,
+            thumbnail_url: courseData.thumbnail_url || null, // Course thumbnail URL
             // language field exists but we don't set it (will use default or NULL)
           },
         ])
@@ -84,6 +85,7 @@ export const CourseModel = {
       if (updateData.level) mappedData.level = updateData.level;
       if (updateData.duration) mappedData.duration = parseInt(updateData.duration);
       if (updateData.requirements !== undefined) mappedData.requirements = updateData.requirements;
+      if (updateData.thumbnail_url !== undefined) mappedData.thumbnail_url = updateData.thumbnail_url;
       
       // Don't manually set updated_at, let the trigger handle it
       const { data, error } = await supabase
@@ -101,12 +103,39 @@ export const CourseModel = {
     }
   },
 
-  // Delete a course (simplified version for debugging)
+  // Delete a course and its thumbnail
   async deleteCourse(courseId) {
     try {
-      console.log("Starting simple course deletion for courseId:", courseId);
+      console.log("Starting course deletion for courseId:", courseId);
       
-      // Just delete the course directly without .select() to avoid iteration issues
+      // First, get the course data to check for thumbnail
+      const { data: courseData, error: fetchError } = await supabase
+        .from("courses")
+        .select("thumbnail_url")
+        .eq("course_id", courseId)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = not found
+        console.error("Error fetching course for deletion:", fetchError);
+        throw fetchError;
+      }
+
+      // Delete thumbnail from Digital Ocean Spaces if it exists
+      if (courseData?.thumbnail_url) {
+        try {
+          const { deleteCourseThumbnail } = await import("../../utils/courseThumbnailUpload.js");
+          const deleteResult = await deleteCourseThumbnail(courseData.thumbnail_url);
+          if (deleteResult.success) {
+            console.log("✅ Course thumbnail deleted from storage");
+          } else {
+            console.warn("⚠️ Failed to delete thumbnail:", deleteResult.error);
+          }
+        } catch (thumbnailError) {
+          console.warn("⚠️ Error deleting thumbnail (continuing with course deletion):", thumbnailError);
+        }
+      }
+      
+      // Delete the course from database
       const { data, error } = await supabase
         .from("courses")
         .delete()
