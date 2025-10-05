@@ -61,6 +61,7 @@ app.get("/test-simple", (req, res) => {
   res.json({ message: "Simple test route working", timestamp: new Date().toISOString() });
 });
 app.use("/instructor/overview", OverviewRouter);
+app.use("/overview", OverviewRouter); // General overview route for frontend compatibility
 app.use("/instructor/comments", commentRouter);
 app.use("/instructor/quizzes", QuizRouter);
 app.use("/instructor/modules", moduleRoutes);
