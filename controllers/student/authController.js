@@ -48,6 +48,7 @@ export const register = async (req, res) => {
         res.json({ message: "Signup successful", studentToken });
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 
@@ -66,10 +67,12 @@ export const loginSuccess = async (req, res) => {
 
 export const googleCallback = async (req, res) => {
     try {
-        const user = req.student;
+        const user = req.user;
+        console.log(user)
         const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
         res.redirect(`${process.env.FRONTEND_URL}/dashboard?studentToken=${studentToken}`);
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 

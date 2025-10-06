@@ -132,6 +132,41 @@ export const createComment = async (course_id, student_id, rating, comment_text)
     return data;
 }
 
+// Edit a comment
+export const editComment = async (comment_id, updatedText, updatedRating) => {
+    const { data, error } = await supabase
+        .from("comments")
+        .update({ 
+            comment_text: updatedText, 
+            rating: updatedRating, 
+            comment_date: new Date()
+        })
+        .eq("comment_id", comment_id)
+        .select("*")
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data;
+}
+
+// Delete a comment
+export const deleteComment = async (comment_id) => {
+    const { data, error } = await supabase
+        .from("comments")
+        .delete()
+        .eq("comment_id", comment_id)
+        .select("*")
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data;
+}
+
+
 export const createReply = async (comment_id, student_id, reply_text) => {
     const { data, error } = await supabase
         .from("comment_replies")
@@ -141,5 +176,31 @@ export const createReply = async (comment_id, student_id, reply_text) => {
     if (error) {
         throw new Error(error.message);
     }
+    return data;
+}
+
+// Edit a reply
+export const editReply = async (reply_id, updatedText) => {
+    const { data, error } = await supabase
+        .from("comment_replies")
+        .update({ reply_text: updatedText })
+        .eq("reply_id", reply_id)
+        .select("*")
+        .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+}
+
+// Delete a reply
+export const deleteReply = async (reply_id) => {
+    const { data, error } = await supabase
+        .from("comment_replies")
+        .delete()
+        .eq("reply_id", reply_id)
+        .select("*")
+        .single();
+        
+    if (error) throw new Error(error.message);
     return data;
 }
