@@ -12,13 +12,13 @@ import {
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Add a chapter
+//add a chapter
 router.post('/:moduleId', auth, addChapter);
 
-//delete a chapter(lesson==chapter)
+//delete a chapter
 router.delete('/:lessonId', auth, deleteChapter);
 
-// add resources to the lesson
+//add resources to the lesson
 router.post("/:lessonId/video", auth, upload.single("file"), addVideoToLesson);
 router.post("/:lessonId/note", auth, upload.single("file"), addNoteToLesson);
 router.post("/:lessonId/assignment", auth, upload.single("file"), addAssignmentToLesson);

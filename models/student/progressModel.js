@@ -1,7 +1,6 @@
 import { supabase } from "../../config/supabaseClient.js";
 
 export async function createCourseProgress(studentId, courseId) {
-  // get all modules for the given course
   const { data: modules, error: modulesError } = await supabase
     .from("modules")
     .select("module_id")
@@ -10,7 +9,7 @@ export async function createCourseProgress(studentId, courseId) {
   if (modulesError) throw modulesError;
   if (!modules || modules.length === 0) throw new Error("No modules found for this course");
 
-  // get existing progress for this student + course
+  //get existing progress for this student + course
   const { data: existingProgress, error: existingError } = await supabase
     .from("course_progress")
     .select("module_id")
@@ -21,7 +20,7 @@ export async function createCourseProgress(studentId, courseId) {
 
   const existingModuleIds = existingProgress?.map(p => p.module_id) || [];
 
-  // filter modules that are not already in progress table
+  //filter modules that are not already in progress table
   const newProgressRecords = modules
     .filter(m => !existingModuleIds.includes(m.module_id))
     .map(m => ({
@@ -32,7 +31,6 @@ export async function createCourseProgress(studentId, courseId) {
     }));
 
   if (newProgressRecords.length === 0) {
-    //all modules already have progress rows
     return { message: "Progress already initialized for all modules" };
   }
 
@@ -134,7 +132,7 @@ export async function getCourseProgress(studentId, courseId) {
     progress.splice(0, progress.length, ...refreshed); // overwrite old array
   }
 
-  // build final array
+  //build final array
   const modulesWithProgress = modules.map((m) => {
     const found = progress.find((p) => p.module_id === m.module_id);
     return {
