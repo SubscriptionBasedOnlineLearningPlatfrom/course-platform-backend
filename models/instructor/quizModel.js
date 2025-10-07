@@ -36,13 +36,15 @@ export const loadQuizModel = async (lessonId) => {
     if (quizError) {
         throw new Error(quizError.message);
     }
-    
-
+    console.log(quiz)
+    if (quiz.length === 0) {
+        return {quiz:[],full:[]};
+    }
 
     const { data: questions, error: questionsError } = await supabase
         .from('questions')
         .select('question_id, question_text')
-        .eq('quiz_id', quiz[0].quiz_id)
+        .eq('quiz_id', quiz[0]?.quiz_id)
         .order('created_at', { ascending: true });
 
     if (questionsError) {

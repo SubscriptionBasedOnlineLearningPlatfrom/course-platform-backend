@@ -41,11 +41,12 @@ export const quizCreation = async (req, res) => {
 export const loadQuiz = async (req, res) => {
   try {
     const lessonId = req.params.lessonId;
-    const full = await loadQuizModel(lessonId);
+    const {quiz,full} = await loadQuizModel(lessonId);
     
-    return res.json(full);
+    return res.json({quiz,full});
 
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error: "Internal Server Error : ", details: error.message });
   }
 }

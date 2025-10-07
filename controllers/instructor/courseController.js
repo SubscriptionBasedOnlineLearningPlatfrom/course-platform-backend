@@ -20,14 +20,14 @@ export const CourseController = {
       if (req.file) {
         const { uploadCourseThumbnail } = await import("../../utils/courseThumbnailUpload.js");
         const uploadResult = await uploadCourseThumbnail(req.file, instructorId);
-        
+
         if (!uploadResult.success) {
           return res.status(400).json({
             success: false,
             error: "Failed to upload thumbnail: " + uploadResult.error,
           });
         }
-        
+
         thumbnailUrl = uploadResult.url;
         console.log('✅ Course thumbnail uploaded:', thumbnailUrl);
       }
@@ -202,7 +202,7 @@ export const CourseController = {
       const { courseId } = req.params;
       console.log("Delete request received for courseId:", courseId);
       console.log("User from req.user:", req.user);
-      
+
       const instructorId = req.user?.instructor_id;
       console.log("Instructor ID:", instructorId);
 
@@ -226,7 +226,7 @@ export const CourseController = {
       console.log("Fetching course data for courseId:", courseId);
       const courseResult = await CourseModel.getCourseById(courseId);
       console.log("Course fetch result:", courseResult);
-      
+
       if (!courseResult.success) {
         console.log("Error: Course not found");
         return res.status(404).json({
@@ -237,7 +237,7 @@ export const CourseController = {
 
       console.log("Course instructor_id:", courseResult.data.instructor_id);
       console.log("Current user instructor_id:", instructorId);
-      
+
       if (courseResult.data.instructor_id !== instructorId) {
         console.log("Error: Permission denied - course doesn't belong to instructor");
         return res.status(403).json({
