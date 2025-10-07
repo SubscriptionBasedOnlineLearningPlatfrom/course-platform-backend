@@ -7,7 +7,7 @@ import {
   updateLessonResource,
 } from "../../models/instructor/lessonFileModel.js";
 
-// Helper to upload file to DO
+//helper to upload file to DO
 const uploadToDO = async (file, folder) => {
   const fileName = `${folder}${Date.now()}-${file.originalname}`;
   const data = await s3
@@ -20,10 +20,10 @@ const uploadToDO = async (file, folder) => {
     })
     .promise();
 
-  return data.Location; // public URL
+  return data.Location; 
 };
 
-// Upload Video
+//upload Video
 export const addVideoToLesson = async (req, res) => {
   const { lessonId } = req.params;
   const file = req.file;
@@ -42,7 +42,7 @@ export const addVideoToLesson = async (req, res) => {
   }
 };
 
-// Upload Note
+//upload Note
 export const addNoteToLesson = async (req, res) => {
   const { lessonId } = req.params;
   const file = req.file;
@@ -61,7 +61,7 @@ export const addNoteToLesson = async (req, res) => {
   }
 };
 
-// Upload Assignment
+//upload Assignment
 export const addAssignmentToLesson = async (req, res) => {
   const { lessonId } = req.params;
   const file = req.file;
@@ -80,7 +80,7 @@ export const addAssignmentToLesson = async (req, res) => {
   }
 };
 
-//Delete Resource
+//delete Resource
 export const deleteLessonResource = async (req, res) => {
   try {
     const { lessonId, type } = req.params;
@@ -90,7 +90,7 @@ export const deleteLessonResource = async (req, res) => {
       return res.status(404).json({ error: "Lesson not found" });
     }
 
-    // Choose column + file URL
+    //choose column + file URL
     let column, fileUrl;
     if (type === "Video") {
       column = "video_url";
@@ -109,13 +109,13 @@ export const deleteLessonResource = async (req, res) => {
       return res.status(400).json({ error: "No resource found for this lesson" });
     }
 
-    // Extract object key from URL
+    //extract object key from URL
     const baseUrl = `https://${process.env.DO_SPACES_BUCKET}.${process.env.DO_SPACES_ENDPOINT.replace("https://","")}/`;
     const objectKey = fileUrl.replace(baseUrl, "");
     if (!objectKey) return res.status(400).json({ error: "Invalid file URL" });
 
 
-    // Delete from DigitalOcean Space
+    //delete from DO Space
     await s3
       .deleteObject({
         Bucket: process.env.DO_SPACES_BUCKET,
@@ -123,7 +123,7 @@ export const deleteLessonResource = async (req, res) => {
       })
       .promise();
 
-    // Update DB
+    //update DB
     await updateLessonResource(lessonId, column);
 
     res.json({ message: `${type} deleted successfully` });
