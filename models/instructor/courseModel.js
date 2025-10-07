@@ -24,6 +24,7 @@ export const CourseModel = {
             rating: 0, // Default rating for new courses
             duration: courseData.duration, // Already validated and converted in controller
             requirements: courseData.requirements || null,
+            thumbnail_url: courseData.thumbnail_url || null, // Course thumbnail URL
             // language field exists but we don't set it (will use default or NULL)
           },
         ])
@@ -84,6 +85,7 @@ export const CourseModel = {
       if (updateData.level) mappedData.level = updateData.level;
       if (updateData.duration) mappedData.duration = parseInt(updateData.duration);
       if (updateData.requirements !== undefined) mappedData.requirements = updateData.requirements;
+      if (updateData.thumbnail_url !== undefined) mappedData.thumbnail_url = updateData.thumbnail_url;
       
       // Don't manually set updated_at, let the trigger handle it
       const { data, error } = await supabase
@@ -101,18 +103,51 @@ export const CourseModel = {
     }
   },
 
-  // Delete a course
+  // Delete a course and its thumbnail
   async deleteCourse(courseId) {
     try {
+      console.log("Starting course deletion for courseId:", courseId);
+      
+      // First, get the course data to check for thumbnail
+      const { data: courseData, error: fetchError } = await supabase
+        .from("courses")
+        .select("thumbnail_url")
+        .eq("course_id", courseId)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = not found
+        console.error("Error fetching course for deletion:", fetchError);
+        throw fetchError;
+      }
+
+      // Delete thumbnail from Digital Ocean Spaces if it exists
+      if (courseData?.thumbnail_url) {
+        try {
+          const { deleteCourseThumbnail } = await import("../../utils/courseThumbnailUpload.js");
+          const deleteResult = await deleteCourseThumbnail(courseData.thumbnail_url);
+          if (deleteResult.success) {
+            console.log("✅ Course thumbnail deleted from storage");
+          } else {
+            console.warn("⚠️ Failed to delete thumbnail:", deleteResult.error);
+          }
+        } catch (thumbnailError) {
+          console.warn("⚠️ Error deleting thumbnail (continuing with course deletion):", thumbnailError);
+        }
+      }
+      
+      // Delete the course from database
       const { data, error } = await supabase
         .from("courses")
         .delete()
-        .eq("course_id", courseId)
-        .select()
-        .single();
+        .eq("course_id", courseId);
 
-      if (error) throw error;
-      return { success: true, data };
+      if (error) {
+        console.error("Error deleting course:", error);
+        throw error;
+      }
+      
+      console.log("Course deleted successfully, affected rows:", data);
+      return { success: true, data: { courseId, deleted: true } };
     } catch (error) {
       console.error("Error deleting course:", error);
       return { success: false, error: error.message };

@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
 import { CourseController } from "../../controllers/instructor/courseController.js";
+import { upload } from "../../config/doSpaces.js";
 
 const router = express.Router();
 
@@ -18,6 +19,26 @@ router.get("/test", (req, res) => {
     success: true,
     message: "Course routes are working! 🎉"
   });
+});
+
+// Test delete route without auth for debugging
+router.delete("/test/:courseId", async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    console.log("Test delete route called with courseId:", courseId);
+    
+    const { CourseModel } = await import("../../models/instructor/courseModel.js");
+    const result = await CourseModel.deleteCourse(courseId);
+    
+    console.log("Test delete result:", result);
+    res.json(result);
+  } catch (error) {
+    console.error("Test delete error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
 });
 
 // Test route to check database structure (no auth required)
@@ -40,7 +61,7 @@ router.get("/test/structure", async (req, res) => {
 });
 
 // Course routes for instructors - using proper JWT authentication
-router.post("/", requireAuth, CourseController.createCourse);
+router.post("/", requireAuth, upload.single('thumbnail'), CourseController.createCourse);
 router.get("/", requireAuth, CourseController.getInstructorCourses);
 router.get("/:courseId", requireAuth, CourseController.getCourseById);
 router.put("/:courseId", requireAuth, CourseController.updateCourse);

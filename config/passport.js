@@ -7,15 +7,15 @@ import {
   findUserById,
   createUser,
   verifyPassword,
-} from "../models/student/authModel.js";
+} from "../models/instructor/authModel.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 export const configurePassport = () => {
-  // Local
+  // Local Strategy
   passport.use(
-    "student-google", 
+    "local", 
     new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
       try {
         const user = await findUserByEmail(email);
@@ -29,9 +29,9 @@ export const configurePassport = () => {
     })
   );
 
-  // JWT
+  // JWT Strategy
   passport.use(
-    "student-google", 
+    "jwt", 
     new JwtStrategy(
       {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -49,9 +49,9 @@ export const configurePassport = () => {
     )
   );
 
-  // Google
+  // Google Strategy
   passport.use(
-    "student-google", 
+    "google", 
     new GoogleStrategy(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
@@ -80,6 +80,21 @@ export const configurePassport = () => {
       }
     )
   );
+
+  // Serialize user for sessions
+  passport.serializeUser((user, done) => {
+    done(null, user.instructor_id || user.student_id || user.id);
+  });
+
+  // Deserialize user from sessions
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await findUserById(id);
+      done(null, user);
+    } catch (err) {
+      done(err, null);
+    }
+  });
 
   return passport;
 };

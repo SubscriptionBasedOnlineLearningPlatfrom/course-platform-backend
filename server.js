@@ -1,10 +1,8 @@
 import express from "express";
 import passport from "passport";
 import cors from "cors";
-// import session from "express-session"; // optional if you use sessions, not needed for JWT only
 import dotenv from "dotenv";
 import 'dotenv/config';
-// import cookieParser from "cookie-parser";
 import session from "express-session";
 // import cookieParser from "cookie-parser";
 // import { supabase } from "./Database/SupabaseClient.js";
@@ -23,6 +21,8 @@ import subscriptionRoute from "./routes/student/subscriptionRoute.js";
 import quizRouter from "./routes/student/quizRoute.js";
 import profileRoute from "./routes/student/profileRoute.js";
 import courseContentRoutes from "./routes/student/courseContentRoutes.js";
+import studentSubmissionRoutes from "./routes/student/studentSubmissionRoutes.js";
+import { configurePassport } from "./config/passport.js";
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
 
@@ -47,7 +47,8 @@ app.use(session({
 
 
 
-// Initialize Passport
+// Configure and Initialize Passport
+configurePassport();
 app.use(passport.initialize());
 app.use(passport.session()); 
 // -------------------- ROUTES --------------------
@@ -56,11 +57,12 @@ app.get("/", (req, res) => {
 });
 
 // Direct test route for Digital Ocean
-app.get("/test-simple", (req, res) => {
-  console.log("Simple test route hit!");
-  res.json({ message: "Simple test route working", timestamp: new Date().toISOString() });
-});
+// app.get("/test-simple", (req, res) => {
+//   console.log("Simple test route hit!");
+//   res.json({ message: "Simple test route working", timestamp: new Date().toISOString() });
+// });
 app.use("/instructor/overview", OverviewRouter);
+app.use("/overview", OverviewRouter); // General overview route for frontend compatibility
 app.use("/instructor/comments", commentRouter);
 app.use("/instructor/quizzes", QuizRouter);
 app.use("/instructor/modules", moduleRoutes);
@@ -76,6 +78,7 @@ app.use('/student/subscription', subscriptionRoute);
 app.use("/student/quizzes", quizRouter);
 app.use("/student/profile", profileRoute);
 app.use('/student/course', courseContentRoutes);
+app.use('/student/assignments', studentSubmissionRoutes);
 
 // Routes
 app.use("/auth", authRoutes);
@@ -83,10 +86,10 @@ app.use("/auth", authRoutes);
 // app.use("/auth", authRoutes); // signup, login, dashboard
 
 // -------------------- ERROR HANDLER --------------------
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).json({ error: "Something went wrong!" });
-// });
+app.use((err, req, res, next) => {
+  console.error("Server Error:", err.stack);
+  res.status(500).json({ error: "Something went wrong!", details: err.message });
+});
 
 // -------------------- START SERVER --------------------
 const PORT = process.env.PORT || 4000;
