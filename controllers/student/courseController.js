@@ -1,7 +1,7 @@
 import { transporter } from "../../config/nodemailer.js";
 import { courseEnrollmentEmail } from "../../email-formats/courseEnrollment.js";
 import { findUserById } from "../../models/student/authModel.js";
-import { courseDetailsByCourseId, commentsReplies, createEnrollment, getRelatedCourses, createComment, createReply, checkEnrollment, editComment, deleteComment,deleteReply, editReply } from "../../models/student/courseModel.js";
+import { courseDetailsByCourseId, commentsReplies, createEnrollment, getRelatedCourses, createComment, createReply, checkEnrollment, editComment, deleteComment, deleteReply, editReply, progressPercentage,  } from "../../models/student/courseModel.js";
 import { z } from 'zod';
 
 export const courseDetails = async (req, res) => {
@@ -25,8 +25,8 @@ export const enrollment = async (req, res) => {
     try {
         const student_id = req.studentId;
         const course_id = req.body.course_id;
-        const student =await findUserById(student_id);
-        const {course} =await courseDetailsByCourseId(course_id);
+        const student = await findUserById(student_id);
+        const { course } = await courseDetailsByCourseId(course_id);
         const data = await createEnrollment(course_id, student_id);
         // Usage
         const mailOptions = {
@@ -37,7 +37,7 @@ export const enrollment = async (req, res) => {
         };
 
         await transporter.sendMail(mailOptions);
-        
+
         return res.status(200).json(data);
 
     } catch (error) {
@@ -173,6 +173,19 @@ export const deleteReplyByStudent = async (req, res) => {
         await deleteReply(reply_id);
         return res.status(200).send();
     } catch (error) {
+        console.log(error)
+        return res.status(500).json({ error: "Internal server error", details: error.message });
+    }
+}
+
+export const updateProgressPercentage = async (req, res) => {
+    try {
+        const studentId = req.studentId;
+        const courseId = req.params.courseId;
+        const progressPercentage = await progressPercentage(studentId, courseId);
+        return res.json({ progressPercentage });
+    }
+    catch(error){
         console.log(error)
         return res.status(500).json({ error: "Internal server error", details: error.message });
     }

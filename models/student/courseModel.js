@@ -200,7 +200,52 @@ export const deleteReply = async (reply_id) => {
         .eq("reply_id", reply_id)
         .select("*")
         .single();
-        
+
     if (error) throw new Error(error.message);
     return data;
+}
+
+
+// get progress percentage 
+export const progressPercentage = async (courseId, studentId) => {
+    const { data: lessons, error: lessonsError } = await supabase
+      .from("lessons")
+      .select("*")
+      .eq("course_id", courseId);
+
+    if (lessonsError) throw lessonsError;
+
+    const totalLessons = lessons.length;
+
+    // 2. Fetch student progress for this course
+    const { data: progress, error: progressError } = await supabase
+      .from("student_progress")
+      .select("*")
+      .eq("student_id", studentId)
+      .eq("course_id", courseId);
+
+    if (progressError) throw progressError;
+
+    // 3. Count completed lessons
+    let completedLessons = 0;
+    lessons.forEach((lesson) => {
+      const progressItem = progress.find(
+        (p) => p.module_id === lesson.module_id
+      );
+      if (progressItem && progressItem.is_completed) completedLessons++;
+    });
+
+    // 4. Calculate percentage
+    const progressPercentage =
+      totalLessons === 0 ? 0 : (completedLessons / totalLessons) * 100;
+
+    const {data:progressData, error:progressDataError} = await supabase
+        .from("enrollments")
+        .update({ progress_percentage: progressPercentage })
+        .eq("course_id", courseId)
+        .eq("student_id", studentId)
+        .select()
+        .single();
+
+    return progressData;
 }

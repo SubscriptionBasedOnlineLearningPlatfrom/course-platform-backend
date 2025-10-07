@@ -1,5 +1,5 @@
 import express from 'express'
-import { checkCourseEnrollment, courseDetails, deleteCommentByStudent, deleteReplyByStudent, editCommentByStudent, editReplyByStudent, enrollment, fetchRelatedCourses, postComment, postReply, viewCommentsWithReplies } from '../../controllers/student/courseController.js';
+import { checkCourseEnrollment, courseDetails, deleteCommentByStudent, deleteReplyByStudent, editCommentByStudent, editReplyByStudent, enrollment, fetchRelatedCourses, postComment, postReply, updateProgressPercentage, viewCommentsWithReplies } from '../../controllers/student/courseController.js';
 import { fetchCourses } from "../../controllers/student/getAllCoursesController.js";
 import { studentAuth } from '../../middlewares/authMiddleware.js';
 
@@ -9,6 +9,7 @@ courseRouter.get('/:courseId', courseDetails);
 courseRouter.post('/enrollment',studentAuth, enrollment);
 courseRouter.get("/check-enrollment/:courseId",studentAuth, checkCourseEnrollment);
 courseRouter.get("/related-courses/:category",fetchRelatedCourses);
+courseRouter.put("/progress-percentage/:courseId", studentAuth,updateProgressPercentage);
 courseRouter.get("/", fetchCourses);
 courseRouter.get("/comments-with-replies/:courseId", viewCommentsWithReplies);
 courseRouter.post("/create-comment/:courseId",studentAuth, postComment);
