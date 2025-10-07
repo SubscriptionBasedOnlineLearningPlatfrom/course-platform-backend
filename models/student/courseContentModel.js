@@ -2,7 +2,7 @@ import { supabase } from '../../config/supabaseClient.js';
 
 
 export const getModulesByCourse = async (courseId, studentId) => {
-  // fetch the course name
+  //fetch the course name
   const { data: courseData, error: courseError } = await supabase
     .from('courses')
     .select('course_title')
@@ -11,7 +11,7 @@ export const getModulesByCourse = async (courseId, studentId) => {
 
   if (courseError) throw courseError;
 
-  // fetch modules with lessons
+  //fetch modules with lessons
   const { data: moduleData, error: moduleError } = await supabase
     .from('modules')
     .select(`
@@ -31,7 +31,7 @@ export const getModulesByCourse = async (courseId, studentId) => {
 
   if (moduleError) throw moduleError;
 
-  // fetch student's progress for these modules
+  //fetch student's progress for these modules
   const { data: progressData, error: progressError } = await supabase
     .from('course_progress')
     .select('module_id, is_completed')
@@ -43,7 +43,7 @@ export const getModulesByCourse = async (courseId, studentId) => {
 
   if (progressError) throw progressError;
 
-  // Combine results
+  //combine results
   const modules = moduleData.map((mod) => {
     const progress = progressData.find((p) => p.module_id === mod.module_id);
     return {
@@ -51,7 +51,7 @@ export const getModulesByCourse = async (courseId, studentId) => {
       course_title: courseData.course_title,
       chapters: mod.lessons || [],
       lessons: undefined,
-      is_completed: progress ? progress.is_completed : false, // default false if no record
+      is_completed: progress ? progress.is_completed : false, 
     };
   });
 

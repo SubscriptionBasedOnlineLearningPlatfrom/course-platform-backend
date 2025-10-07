@@ -4,13 +4,13 @@ import { auth } from '../../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// Add a new module to a course
+//add a new module 
 router.post('/:courseId', auth, addModule);
 
-// Get all modules for a course
+//get all modules 
 router.get('/:courseId', auth, listModules);
 
-// delete module
+//delete module
 router.delete('/:moduleId', auth, deleteModule);
 
 

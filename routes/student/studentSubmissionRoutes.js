@@ -4,7 +4,7 @@ import { submitAssignment, getStudentSubmissions } from "../../controllers/stude
 import { studentAuth } from '../../middlewares/authMiddleware.js';
 
 const router = express.Router();
-const upload = multer(); // memory storage for DO Space
+const upload = multer();
 
 //submit assignments
 router.post("/:courseId/submit", studentAuth, upload.single("file"), submitAssignment);

@@ -1,6 +1,6 @@
 import { getAllCourses, getFeaturedCourses, getCoursesWithRealRatings } from "../../models/student/courseModel.js";
 
-// GET all courses for "Public users" with optional search
+//all courses for public users
 export const fetchCourses = async (req, res) => {
   try {
     const { search } = req.query;

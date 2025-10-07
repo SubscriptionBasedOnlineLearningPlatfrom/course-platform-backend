@@ -23,7 +23,7 @@ export const trackProgress = async (req, res) => {
 //update progress for a module 
 export const updateModuleProgress = async (req, res) => {
   try {
-    const studentId = req.studentId; // from middleware
+    const studentId = req.studentId;
     const { moduleId, isCompleted } = req.body;
 
     if (!moduleId || typeof isCompleted !== "boolean") {

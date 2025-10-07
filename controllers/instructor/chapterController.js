@@ -32,5 +32,4 @@ export const deleteChapter = async (req, res) => {
     res.status(500).json({ message: 'Failed to delete chapter', error: err.message });
   }
 };
-/* don’t automatically remove all associated files from the digital ocean storage..
-   because some files might still be referenced elsewhere or we may want to keep backups */
+

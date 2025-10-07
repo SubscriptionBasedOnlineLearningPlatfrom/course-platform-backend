@@ -1,8 +1,8 @@
 import { supabase } from '../../config/supabaseClient.js';
 
-// Add a chapter (lesson) to a module
+//add a chapter (lesson) to a module
 export const createChapter = async (moduleId, lessonTitle) => {
-  // Get last lesson order for this module
+  //last lesson order for this module
   const { data: lastLesson, error: fetchError } = await supabase
     .from('lessons')
     .select('lesson_order')
@@ -11,11 +11,11 @@ export const createChapter = async (moduleId, lessonTitle) => {
     .limit(1)
     .single();
 
-  if (fetchError && fetchError.code !== 'PGRST116') throw fetchError; // ignore "no rows" error
+  if (fetchError && fetchError.code !== 'PGRST116') throw fetchError; //ignore "no rows" error
 
   const nextOrder = lastLesson ? lastLesson.lesson_order + 1 : 1;
 
-  // Insert lesson
+  //insert lesson
   const { data, error } = await supabase
     .from('lessons')
     .insert([
@@ -32,7 +32,7 @@ export const createChapter = async (moduleId, lessonTitle) => {
   return data;
 };
 
-// Delete chapter (lesson)
+//delete chapter (lesson)
 export const removeChapter = async (lessonId) => {
   const { data, error } = await supabase
     .from('lessons')
