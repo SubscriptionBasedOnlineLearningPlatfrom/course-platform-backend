@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { supabase } from "../../config/supabaseClient.js";
-import { editQuizModel, loadQuizModel, quizCreationModel } from "../../models/instructor/quizModel.js";
+import { deleteAnswer, deleteQuestion, editQuizModel, loadQuizModel, quizCreationModel } from "../../models/instructor/quizModel.js";
 
 const NormalizedQuestion = z.object({
   question_text: z.string().min(1),
@@ -23,7 +23,6 @@ export const quizCreation = async (req, res) => {
     const lessionId = req.params.lessonId;
     const parsed = QuizSchema.safeParse(req.body);
 
-    console.log(lessionId)
 
     if (!parsed.success) {
       return res.status(400).json({ error: parsed.error });
@@ -34,7 +33,6 @@ export const quizCreation = async (req, res) => {
     return res.status(201).json({ quiz_id: data });
 
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: "Internal Server Error : ", details: error.message });
   }
 }
@@ -44,11 +42,10 @@ export const loadQuiz = async (req, res) => {
   try {
     const lessonId = req.params.lessonId;
     const full = await loadQuizModel(lessonId);
-    console.log(full)
+    
     return res.json(full);
 
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ error: "Internal Server Error : ", details: error.message });
   }
 }
@@ -69,6 +66,24 @@ export const editQuiz = async (req, res) => {
     return res.json({ message: "Quiz updated successfully" });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+export const deleteQues = async (req,res) => {
+  const questionId = req.params.questionId;
+  try {
+    const data = await deleteQuestion(questionId);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const deleteAns = async (req,res) => {
+  const answerId = req.params.answerId;
+  try {
+    const data = deleteAnswer(answerId);
+  } catch (error) {
     res.status(500).json({ error: err.message });
   }
 }

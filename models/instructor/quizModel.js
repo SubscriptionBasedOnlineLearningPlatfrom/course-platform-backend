@@ -8,7 +8,6 @@ export const quizCreationModel = async (lesson_id, quiz_title, questions) => {
     })
     
     if (error) {
-        console.log(error);
         throw new Error(error.message);
     }
 
@@ -32,12 +31,12 @@ export const loadQuizModel = async (lessonId) => {
     const { data: quiz, error: quizError } = await supabase
         .from('quizzes')
         .select('quiz_id, quiz_title')
-        .eq('lesson_id', lessonId);
+        .eq('lesson_id', lessonId);    
 
     if (quizError) {
-        console.log(quizError)
         throw new Error(quizError.message);
     }
+    
 
 
     const { data: questions, error: questionsError } = await supabase
@@ -61,10 +60,46 @@ export const loadQuizModel = async (lessonId) => {
     }
 
     const full = questions.map(q => ({
+        question_id:q.question_id,
         question: q.question_text,
-        answers: (answers || []).filter(ans => ans.question_id === q.question_id).map(a => a.answer_text),
+        answers: (answers || []).filter(ans => ans.question_id === q.question_id).map(a => ({answer_id: a.answer_id,answer_text:a.answer_text})),
         correctAnswer: (answers || []).filter(a => a.question_id === q.question_id).findIndex(a => a.is_correct)
     }))
 
     return {quiz,full};
+}
+
+export const deleteQuestion = async (question_id) => {
+    const {data, error} = await supabase
+                                .from('questions')
+                                .delete()
+                                .eq('question_id', question_id)
+                                .select();
+    if(error){
+        throw new Error(error.message);
+    }
+
+    const {data:answer, error:answerError} = await supabase
+                                .from('answers')
+                                .delete()
+                                .eq('question_id', question_id)
+                                .select();
+    if(answerError){
+        throw new Error(answerError.message);
+    }
+    return data;
+
+}
+
+export const deleteAnswer = async (answer_id) => {
+    const {data, error} = await supabase
+                                .from('answers')
+                                .delete()
+                                .eq('answer_id', answer_id)
+                                .select();
+
+    if(error){
+        throw new Error(error.message);
+    }
+    return data;
 }
