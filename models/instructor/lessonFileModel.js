@@ -1,6 +1,6 @@
 import {supabase} from "../../config/supabaseClient.js";
 
-//Save video URL
+//save video URL
 export const saveVideoUrl = async (lessonId, url) => {
   const { data, error } = await supabase
     .from("lessons")
@@ -13,7 +13,7 @@ export const saveVideoUrl = async (lessonId, url) => {
   return data;
 };
 
-// Save note URL
+//save note URL
 export const saveNoteUrl = async (lessonId, url) => {
   const { data, error } = await supabase
     .from("lessons")
@@ -26,7 +26,7 @@ export const saveNoteUrl = async (lessonId, url) => {
   return data;
 };
 
-// Save assignment URL
+//save assignment URL
 export const saveAssignmentUrl = async (lessonId, url) => {
   const { data, error } = await supabase
     .from("lessons")
@@ -39,7 +39,7 @@ export const saveAssignmentUrl = async (lessonId, url) => {
   return data;
 };
 
-// get a lesson by ID for resources
+//get a lesson by ID for resources
 export const getLessonById = async (lessonId) => {
   const { data, error } = await supabase
     .from("lessons")
@@ -51,7 +51,7 @@ export const getLessonById = async (lessonId) => {
   return data;
 };
 
-// set a specific resource column (video_url / note_url / assignment_url) to NULL
+//set a specific resource column (video_url / note_url / assignment_url) to NULL
 export const updateLessonResource = async (lessonId, column) => {
   const { error } = await supabase
     .from("lessons")

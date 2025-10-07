@@ -1,7 +1,7 @@
 import { supabase } from '../../config/supabaseClient.js';
 
 export const createModule = async (courseId, title) => {
-  // Get the last module order for this course
+  //get the last module order for this course
   const { data: lastModule, error: fetchError } = await supabase
     .from('modules')
     .select('module_order')
@@ -25,7 +25,7 @@ export const createModule = async (courseId, title) => {
 };
 
 export const getModulesByCourse = async (courseId) => {
-  // Fetch modules with lessons nested
+  //fetch modules with lessons nested
   const { data, error } = await supabase
     .from('modules')
     .select(`
@@ -45,11 +45,11 @@ export const getModulesByCourse = async (courseId) => {
 
   if (error) throw error;
 
-  // Make sure lessons is always an array
+  //lessons array
   const modules = data.map((mod) => ({
     ...mod,
     chapters: mod.lessons || [],
-    lessons: undefined, // remove lessons key if want
+    lessons: undefined, 
   }));
 
   return modules;
@@ -57,7 +57,7 @@ export const getModulesByCourse = async (courseId) => {
 
 
 export const removeModule = async (moduleId) => {
-  // delete lessons first (if any)
+  //delete lessons 
   const { error: lessonError } = await supabase
     .from('lessons')
     .delete()
@@ -65,7 +65,7 @@ export const removeModule = async (moduleId) => {
 
   if (lessonError) throw new Error(lessonError.message);
 
-  // delete module
+  //delete module
   const { data, error } = await supabase
     .from('modules')
     .delete()
@@ -74,7 +74,6 @@ export const removeModule = async (moduleId) => {
 
   if (error) throw new Error(error.message);
 
-  // check safely
   return data && data.length > 0;
 };
 
