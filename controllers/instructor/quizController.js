@@ -46,7 +46,6 @@ export const loadQuiz = async (req, res) => {
     return res.json({quiz,full});
 
   } catch (error) {
-    console.log(error)
     return res.status(500).json({ error: "Internal Server Error : ", details: error.message });
   }
 }
@@ -66,7 +65,6 @@ export const editQuiz = async (req, res) => {
 
     return res.json({ message: "Quiz updated successfully" });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 }

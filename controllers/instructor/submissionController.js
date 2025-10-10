@@ -7,7 +7,6 @@ export const getSubmissions = async (req, res) => {
     const submissions = await getSubmissionsByCourse(courseId);
     res.json(submissions);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: err.message });
   }
 };

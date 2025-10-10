@@ -199,7 +199,6 @@ export const updateQuizMarks = async (req, res) => {
     return res.status(200).json({ success: true, message: "Quiz marks updated successfully", result });
   }
   catch (error) {
-    console.error("Error in updateQuizMarks controller:", error);
     return res.status(500).json({ error: "Internal Server Error", details: error.message });
 
   }
