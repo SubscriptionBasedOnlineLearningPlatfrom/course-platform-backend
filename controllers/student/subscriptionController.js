@@ -2,6 +2,9 @@ import Stripe from "stripe";
 import { createEnrollment } from "../../models/student/courseModel.js";
 import { activeModel, activePlan, changeSubscriptionPlan, createPayment } from "../../models/student/subscriptionModel.js";
 import { validate } from "uuid";
+import { paymentSuccessEmail } from "../../email-formats/payment.js";
+import { findUserById } from "../../models/student/authModel.js";
+import { transporter } from "../../config/nodemailer.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -53,9 +56,22 @@ export const createCheckoutSession = async (req, res) => {
 
             })
         }
+
+        const student = await findUserById(studentId);
+        console.log(student)
+
+        const mailOptions = {
+            from: process.env.ADMIN_EMAIL,
+            to: student.email,
+            subject: `Thank You, ${student.username}! Your Payment for ${plan} is Complete`,
+            html: paymentSuccessEmail(student.username, plan)
+        };
+
+        await transporter.sendMail(mailOptions);
         
         res.json({ session_url: session.url })
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: "Stripe API error" });
     }
 }
