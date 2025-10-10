@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { supabase } from "../../config/supabaseClient.js";
 import { signJwt } from "../../utils/jwt.js";
-import { findUserByEmail, createUser } from "../../models/student/authModel.js";
+import { findUserByEmail, createUser, updateSupabaseAuthPassword, updateStudentPassword, sendResetEmail } from "../../models/student/authModel.js";
 import { transporter } from "../../config/nodemailer.js";
 import { registerEmail } from "../../email-formats/register.js";
 
@@ -65,18 +65,6 @@ export const loginSuccess = async (req, res) => {
 
 };
 
-export const googleCallback = async (req, res) => {
-    try {
-        const user = req.user;
-        console.log(user)
-        const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
-        res.redirect(`${process.env.FRONTEND_URL}/dashboard?studentToken=${studentToken}`);
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({ error: "Internal Server Error", details: error.message });
-    }
-
-};
 
 export const dashboard = async (req, res) => {
     try {
@@ -87,41 +75,61 @@ export const dashboard = async (req, res) => {
 
 };
 
+// Reset Password 
 export const resetPassword = async (req, res) => {
-    try {
-        const { email } = emailOnlySchema.parse(req.body);
+  try {
+    const { email } = req.body;
+    if (!email) throw new Error("Email is required.");
 
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${process.env.FRONTEND_URL}/update-password`,
-        });
-        if (error) throw error;
+    console.log("reset-password called with:", email);
+    await sendResetEmail(email);
 
-        res.json({ message: "Password reset email sent!" });
-    } catch (error) {
-        return res.status(500).json({ error: "Internal Server Error", details: error.message });
-    }
-
+    res.json({ message: "Password reset email sent!" });
+  } catch (err) {
+    console.error("reset-password error:", err.message);
+    console.log(err);
+    res.status(400).json({ error: err.message });
+  }
 };
 
+// Update Password 
 export const updatePassword = async (req, res) => {
-    try {
-        const { studentToken, newPassword } = updatePasswordSchema.parse(req.body);
+  try {
+    const { newPassword } = req.body;
+    const studentId = req.studentId;
+    const userEmail = user.email;
 
-        // set a session with the access studentToken
-        const { data: session, error: sessionError } = await supabase.auth.setSession({
-            access_studentToken: studentstudentToken,
-            refresh_studentstudentToken: "",
-        });
-        if (sessionError) throw sessionError;
+    console.log(" Updating password for:", userEmail);
 
-        const userId = session?.user?.id;
-        if (!userId) throw new Error("Invalid or expired reset studentToken.");
+    // Update in Supabase Auth
+    await updateSupabaseAuthPassword(userId, newPassword);
 
-        const { error } = await supabase.auth.admin.updateUserById(userId, { password: newPassword });
-        if (error) throw error;
+    // Update in students table
+    await updateStudentPassword(userEmail, newPassword);
 
-        res.json({ message: "Password updated successfully!" });
-    } catch (error) {
-        return res.status(500).json({ error: "Internal Server Error", details: error.message });
-    }
+    // Generate JWT login token
+    const student = await findUserByEmail(userEmail);
+    const loginToken = jwt.sign(
+      {
+        id: student.student_id,
+        username: student.username,
+        email: student.email,
+      },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({
+      message: "Password updated successfully!",
+      token: loginToken,
+      user: {
+        id: student.student_id,
+        username: student.username,
+        email: student.email,
+      },
+    });
+  } catch (err) {
+    console.error("update-password error:", err.message);
+    res.status(400).json({ error: err.message });
+  }
 };

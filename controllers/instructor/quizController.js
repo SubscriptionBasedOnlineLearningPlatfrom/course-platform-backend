@@ -25,7 +25,7 @@ export const quizCreation = async (req, res) => {
 
 
     if (!parsed.success) {
-      return res.status(400).json({ error: parsed.error });
+      return res.status(500).json({ error: parsed.error });
     }
 
     const {  quiz_title, questions } = parsed.data;
@@ -57,12 +57,12 @@ export const editQuiz = async (req, res) => {
   const { quiz_title, questions } = req.body;
 
   if (!quizId || !quiz_title || !questions) {
-    return res.status(400).json({ error: "quizId, quiz_title, and questions are required" });
+    return res.status(500).json({ error: "quizId, quiz_title, and questions are required" });
   }
 
   try {
     // call the PostgreSQL function
-    const data = editQuizModel(quizId,quiz_title,questions);
+    const data =await editQuizModel(quizId,quiz_title,questions);
 
     return res.json({ message: "Quiz updated successfully" });
   } catch (err) {
@@ -83,8 +83,8 @@ export const deleteQues = async (req,res) => {
 export const deleteAns = async (req,res) => {
   const answerId = req.params.answerId;
   try {
-    const data = deleteAnswer(answerId);
+    const data =await deleteAnswer(answerId);
   } catch (error) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: error.message });
   }
 }

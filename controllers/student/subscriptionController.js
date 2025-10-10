@@ -3,7 +3,6 @@ import { createEnrollment } from "../../models/student/courseModel.js";
 import { activeModel, activePlan, changeSubscriptionPlan, createPayment } from "../../models/student/subscriptionModel.js";
 import { validate } from "uuid";
 
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const createCheckoutSession = async (req, res) => {
@@ -57,7 +56,7 @@ export const createCheckoutSession = async (req, res) => {
         
         res.json({ session_url: session.url })
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: "Stripe API error" });
     }
 }
 
@@ -94,7 +93,7 @@ export const confirmCheckout = async (req, res) => {
             subscriptionId: session.subscription?.id,
         });
     } catch (error) {
-        return res.status(500).json({ error: "Internal Server Error", details: error.message });
+        return res.status(500).json({ error: "Internal Server Error", details: "Missing metadata for enrollment" });
     }
 };
 
@@ -153,6 +152,6 @@ export const activeCurrentPlan = async (req, res) => {
 
         res.json({ session_url: session.url })
     } catch (error) {
-        return res.status(500).json({ error: "Internal Server Error", details: error.message });
+        return res.status(500).json({ error: "Internal Server Error", details: "Stripe session creation failed" });
     }
 }
