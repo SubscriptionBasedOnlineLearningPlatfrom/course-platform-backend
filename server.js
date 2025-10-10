@@ -22,7 +22,8 @@ import quizRouter from "./routes/student/quizRoute.js";
 import profileRoute from "./routes/student/profileRoute.js";
 import courseContentRoutes from "./routes/student/courseContentRoutes.js";
 import studentSubmissionRoutes from "./routes/student/studentSubmissionRoutes.js";
-import { configurePassport } from "./config/passport.js";
+import adminDashboardRoute from "./routes/admin/adminDashboardRoute.js";
+
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
 
@@ -48,7 +49,7 @@ app.use(session({
 
 
 // Configure and Initialize Passport
-configurePassport();
+
 app.use(passport.initialize());
 app.use(passport.session()); 
 // -------------------- ROUTES --------------------
@@ -79,6 +80,9 @@ app.use("/student/quizzes", quizRouter);
 app.use("/student/profile", profileRoute);
 app.use('/student/course', courseContentRoutes);
 app.use('/student/assignments', studentSubmissionRoutes);
+
+// admin
+app.use("/admin/dashboard", adminDashboardRoute);
 
 // Routes
 app.use("/auth", authRoutes);

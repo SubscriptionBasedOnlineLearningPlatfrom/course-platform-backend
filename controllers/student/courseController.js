@@ -209,7 +209,6 @@ export const getMarks = async (req, res) => {
     try {
         const { courseId } = req.params;
         const studentId = req.studentId;
-
         const total = await getTotalMarks(courseId, studentId);
         return res.status(200).json({ total });
     } catch (error) {
