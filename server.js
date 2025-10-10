@@ -17,6 +17,7 @@ import profileRouter from './routes/instructor/profileRoutes.js';
 import submissionRoutes from './routes/instructor/submissionRoutes.js';
 import authRoutes from "./routes/auth.js";
 import adminAuthRoutes from "./routes/adminAuth.js";
+import adminUserManagementRoutes from "./routes/adminUserManagement.js";
 import dashboardRouter from "./routes/student/dashboardRouter.js";
 import authRouter from "./routes/student/authRoute.js";
 import subscriptionRoute from "./routes/student/subscriptionRoute.js";
@@ -86,6 +87,7 @@ app.use('/student/assignments', studentSubmissionRoutes);
 // Routes
 app.use("/auth", authRoutes);
 app.use("/admin/auth", adminAuthRoutes);
+app.use("/admin/users", adminUserManagementRoutes);
 
 // app.use("/auth", authRoutes); // signup, login, dashboard
 
