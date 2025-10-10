@@ -27,6 +27,7 @@ import courseContentRoutes from "./routes/student/courseContentRoutes.js";
 import studentSubmissionRoutes from "./routes/student/studentSubmissionRoutes.js";
 import adminDashboardRoute from "./routes/admin/adminDashboardRoute.js";
 import viewPaymentRoute from "./routes/admin/viewPaymentRoute.js";
+import { configurePassport } from "./config/passport.js";
 
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
@@ -53,7 +54,7 @@ app.use(session({
 
 
 // Configure and Initialize Passport
-
+configurePassport();
 app.use(passport.initialize());
 app.use(passport.session()); 
 // -------------------- ROUTES --------------------

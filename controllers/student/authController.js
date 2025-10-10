@@ -60,6 +60,7 @@ export const loginSuccess = async (req, res) => {
         const studentToken = signJwt({ id: user.student_id, username: user.username, email: user.email });
         res.json({ message: "Login successful", studentToken });
     } catch (error) {
+      console.log(error)
         return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
 

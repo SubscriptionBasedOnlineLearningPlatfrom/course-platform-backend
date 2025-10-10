@@ -203,7 +203,7 @@
 //   "/dashboard",
 //   passport.authenticate("jwt", { session: false }),
 //   (req, res) => {
-//     res.json({ message: `Welcome ${req.user.username}, you are in dashboard!` });
+//     res.json({ message: Welcome ${req.user.username}, you are in dashboard! });
 //   }
 // );
 
@@ -483,7 +483,7 @@ router.post("/update-password", async (req, res) => {
 });
 // Protected route
 router.get("/dashboard", passport.authenticate("jwt", { session: false }), (req, res) => {
-  res.json({ message: `Welcome ${req.user.username}, you are in dashboard!` });
+  res.json({ message: `Welcome ${req.user.username}, you are in dashboard!`});
 });
 
 export default router;
