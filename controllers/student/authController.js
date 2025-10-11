@@ -81,13 +81,10 @@ export const resetPassword = async (req, res) => {
     const { email } = req.body;
     if (!email) throw new Error("Email is required.");
 
-    console.log("reset-password called with:", email);
     await sendResetEmail(email);
 
     res.json({ message: "Password reset email sent!" });
   } catch (err) {
-    console.error("reset-password error:", err.message);
-    console.log(err);
     res.status(400).json({ error: err.message });
   }
 };
@@ -98,8 +95,6 @@ export const updatePassword = async (req, res) => {
     const { newPassword } = req.body;
     const studentId = req.studentId;
     const userEmail = user.email;
-
-    console.log(" Updating password for:", userEmail);
 
     // Update in Supabase Auth
     await updateSupabaseAuthPassword(userId, newPassword);
@@ -129,7 +124,6 @@ export const updatePassword = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("update-password error:", err.message);
     res.status(400).json({ error: err.message });
   }
 };

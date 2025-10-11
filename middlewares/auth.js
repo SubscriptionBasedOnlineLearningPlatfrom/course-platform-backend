@@ -19,7 +19,6 @@ passport.use(
       try {
         const user = await findUserByEmail(email);
         if (!user) return done(null, false, { message: "Invalid email or password" });
-
         const ok = await verifyPassword(password, user.password_hash);
         if (!ok) return done(null, false, { message: "Invalid email or password" });
 
@@ -40,7 +39,8 @@ passport.use(
     },
     async (payload, done) => {
       try {
-        return done(null, payload); 
+        return done(null, payload);
+
       } catch (err) {
         return done(err, false);
       }

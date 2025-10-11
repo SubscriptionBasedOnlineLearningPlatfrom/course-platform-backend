@@ -5,7 +5,6 @@ export const fetchPayments = async (req, res) => {
     const payments = await getPaymentDetails();
     res.status(200).json({ payments });
   } catch (err) {
-    console.error("Error fetching payment details:", err);
     res.status(500).json({ message: "Failed to fetch payment details", error: err.message });
   }
 };

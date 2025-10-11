@@ -140,7 +140,16 @@ import quizRouter from "./routes/student/quizRoute.js";
 import profileRoute from "./routes/student/profileRoute.js";
 import courseContentRoutes from "./routes/student/courseContentRoutes.js";
 import studentSubmissionRoutes from "./routes/student/studentSubmissionRoutes.js";
+<<<<<<< HEAD
+import adminDashboardRoute from "./routes/admin/adminDashboardRoute.js";
+import viewPaymentRoute from "./routes/admin/viewPaymentRoute.js";
 import { configurePassport } from "./config/passport.js";
+import courseManagementRoutes from "./routes/admin/courseManagementRoutes.js";
+import analyticsRoutes from "./routes/admin/analyticsRoutes.js";
+
+=======
+import { configurePassport } from "./config/passport.js";
+>>>>>>> 0e00cded3232a50c86713551483be52e3646425c
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
 
