@@ -39,14 +39,10 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (origin === process.env.FRONTEND_URL || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
+  origin: ['https://your-frontend-domain.com', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 app.use(express.json());
