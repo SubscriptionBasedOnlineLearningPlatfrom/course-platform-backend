@@ -1,5 +1,5 @@
 import express from 'express';
-import { addChapter, deleteChapter } from '../../Controllers/Instructor/chapterController.js';
+import { addChapter, deleteChapter } from '../../controllers/Instructor/chapterController.js';
 import { auth } from '../../middlewares/authMiddleware.js';
 import multer from "multer";
 import {
