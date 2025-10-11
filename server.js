@@ -40,6 +40,7 @@ const app = express();
 
 app.use(cors({
   origin: (origin, callback) => {
+    console.log("CORS origin:", origin);
     // allow requests from localhost (dev) or your deployed frontend
     if (!origin || origin === "http://localhost:5173" || origin === "https://your-frontend-domain.com") {
       callback(null, true);
