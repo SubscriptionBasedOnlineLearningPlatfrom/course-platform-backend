@@ -28,6 +28,8 @@ import studentSubmissionRoutes from "./routes/student/studentSubmissionRoutes.js
 import adminDashboardRoute from "./routes/admin/adminDashboardRoute.js";
 import viewPaymentRoute from "./routes/admin/viewPaymentRoute.js";
 import { configurePassport } from "./config/passport.js";
+import courseManagementRoutes from "./routes/admin/courseManagementRoutes.js";
+import analyticsRoutes from "./routes/admin/analyticsRoutes.js";
 
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
@@ -90,6 +92,8 @@ app.use('/student/assignments', studentSubmissionRoutes);
 // admin
 app.use("/admin/dashboard", adminDashboardRoute);
 app.use("/admin/payment", viewPaymentRoute);
+app.use("/admin/courses", courseManagementRoutes);
+app.use("/admin/analytics", analyticsRoutes);
 
 
 // Routes
