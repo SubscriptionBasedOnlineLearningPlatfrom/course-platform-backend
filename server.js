@@ -44,13 +44,6 @@ app.use(cors({
   credentials: true,
 }));
 
-app.get("/test-cors", (req, res) => {
-  res.json({
-    message: "CORS working ✅",
-    receivedOrigin: req.headers.origin,
-  });
-});
-
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true })); // parse form data
@@ -108,6 +101,15 @@ app.use((err, req, res, next) => {
   console.error("Server Error:", err.stack);
   res.status(500).json({ error: "Something went wrong!", details: err.message });
 });
+
+
+app.get("/test-cors", (req, res) => {
+  res.json({
+    message: "CORS working ✅",
+    receivedOrigin: req.headers.origin,
+  });
+});
+
 
 // -------------------- START SERVER --------------------
 const PORT = process.env.PORT || 4000;
