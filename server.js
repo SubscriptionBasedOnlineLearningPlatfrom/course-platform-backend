@@ -37,14 +37,14 @@ import analyticsRoutes from "./routes/admin/analyticsRoutes.js";
 dotenv.config();
 
 const app = express();
-app.use(express.json());
+
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
 }));
 
-console.log(process.env.FRONTEND_URL)
+app.use(express.json());
 
 // -------------------- MIDDLEWARE --------------------
 app.use(express.json()); // parse JSON bodies
