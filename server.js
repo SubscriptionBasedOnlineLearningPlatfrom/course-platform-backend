@@ -44,6 +44,13 @@ app.use(cors({
   credentials: true,
 }));
 
+app.get("/test-cors", (req, res) => {
+  res.json({
+    message: "CORS working ✅",
+    receivedOrigin: req.headers.origin,
+  });
+});
+
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true })); // parse form data
