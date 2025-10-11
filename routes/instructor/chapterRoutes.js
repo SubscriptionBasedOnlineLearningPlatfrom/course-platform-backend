@@ -7,7 +7,7 @@ import {
   addNoteToLesson,
   addAssignmentToLesson,
   deleteLessonResource,
-} from "../../Controllers/Instructor/lessonFileController.js";
+} from "../../controllers/Instructor/lessonFileController.js";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
