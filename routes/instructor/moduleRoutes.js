@@ -1,5 +1,5 @@
 import express from 'express';
-import { addModule, listModules, deleteModule } from '../../Controllers/Instructor/moduleController.js';
+import { addModule, listModules, deleteModule } from '../../controllers/instructor/moduleController.js';
 import { auth } from '../../middlewares/authMiddleware.js';
 
 const router = express.Router();
