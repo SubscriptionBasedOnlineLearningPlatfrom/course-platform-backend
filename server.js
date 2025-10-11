@@ -39,10 +39,17 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: '*', //process.env.FRONTEND_URL
+  origin: process.env.FRONTEND_URL,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
 }));
+
+app.get("/test-cors", (req, res) => {
+  res.json({
+    message: "CORS working ✅",
+    receivedOrigin: req.headers.origin,
+  });
+});
 
 app.use(express.json());
 
