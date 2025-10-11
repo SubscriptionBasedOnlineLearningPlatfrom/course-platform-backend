@@ -1,5 +1,5 @@
 import express from 'express';
-import { addChapter, deleteChapter } from '../../controllers/Instructor/chapterController.js';
+import { addChapter, deleteChapter } from '../../controllers/instructor/chapterController.js';
 import { auth } from '../../middlewares/authMiddleware.js';
 import multer from "multer";
 import {
@@ -7,7 +7,7 @@ import {
   addNoteToLesson,
   addAssignmentToLesson,
   deleteLessonResource,
-} from "../../controllers/Instructor/lessonFileController.js";
+} from "../../controllers/instructor/lessonFileController.js";
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
