@@ -30,7 +30,6 @@ import viewPaymentRoute from "./routes/admin/viewPaymentRoute.js";
 import { configurePassport } from "./config/passport.js";
 import courseManagementRoutes from "./routes/admin/courseManagementRoutes.js";
 import analyticsRoutes from "./routes/admin/analyticsRoutes.js";
-import { configurePassport } from "./config/passport.js";
 
 /* import instructorRoutes from "./routes/instructorRoutes.js"; */
 /* import passportConfig from "./auth/passportConfig.js"; */
