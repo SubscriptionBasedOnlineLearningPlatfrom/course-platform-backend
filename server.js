@@ -39,15 +39,13 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: '*', //process.env.FRONTEND_URL
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
 }));
 
 app.use(express.json());
 
-// -------------------- MIDDLEWARE --------------------
-app.use(express.json()); // parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // parse form data
 
 app.use(session({
@@ -66,12 +64,7 @@ app.use(passport.session());
 app.get("/", (req, res) => {
   res.send("✅ Server running. Go to /signup or /login");
 });
-
-// Direct test route for Digital Ocean
-// app.get("/test-simple", (req, res) => {
-//   console.log("Simple test route hit!");
-//   res.json({ message: "Simple test route working", timestamp: new Date().toISOString() });
-// });
+// instructors
 app.use("/instructor/overview", OverviewRouter);
 app.use("/overview", OverviewRouter); // General overview route for frontend compatibility
 app.use("/instructor/comments", commentRouter);
