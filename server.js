@@ -38,23 +38,8 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-  origin: (origin, callback) => {
-    console.log("CORS origin:", origin);
-    // allow requests from localhost (dev) or your deployed frontend
-    if (!origin || origin === "http://localhost:5173" || origin === "https://your-frontend-domain.com") {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors());
 
-// Handle preflight requests for all routes
-app.options('*', cors());
 
 app.use(express.json());
 
