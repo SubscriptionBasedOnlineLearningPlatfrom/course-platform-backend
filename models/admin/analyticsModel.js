@@ -1,46 +1,20 @@
 import { supabase } from "../../config/supabaseClient.js";
 
-//instructors bar graph
-export const getInstructorEnrollments = async () => {
-  const { data: instructors, error: instructorError } = await supabase
-    .from("instructors")
-    .select("instructor_id, username");
+//fetch top 10 courses by rating
+export const getHighestRatedCourses = async () => {
+  const { data, error } = await supabase
+    .from('courses')
+    .select('course_title, rating')
+    .order('rating', { ascending: false }) 
+    .limit(10); 
 
-  if (instructorError) throw instructorError;
-
-  const results = [];
-
-  for (const instructor of instructors) {
-    const { data: courses, error: courseError } = await supabase
-      .from("courses")
-      .select("course_id")
-      .eq("instructor_id", instructor.instructor_id);
-
-    if (courseError) throw courseError;
-
-    if (!courses || courses.length === 0) {
-      results.push({ instructor: instructor.username, courses: 0 });
-      continue;
-    }
-
-    // For each course, count enrollments
-    let totalEnrollments = 0;
-    for (const course of courses) {
-      const { count, error: enrollmentError } = await supabase
-        .from("enrollments")
-        .select("*", { count: "exact" })
-        .eq("course_id", course.course_id);
-
-      if (enrollmentError) throw enrollmentError;
-      totalEnrollments += count;
-    }
-    results.push({ instructor: instructor.username, courses: totalEnrollments });
+  if (error) {
+    console.error('Error fetching courses:', error);
+    return [];
   }
 
-  results.sort((a, b) => b.courses - a.courses);
-  return results.slice(0, 10);
+  return data; 
 };
-
 
 //overall analytics bar graph
 export const getOverallAnalytics = async () => {
