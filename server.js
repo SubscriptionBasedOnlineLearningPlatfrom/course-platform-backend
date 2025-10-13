@@ -109,7 +109,7 @@ app.use('/student/assignments', studentSubmissionRoutes);
 app.use("/auth", authRoutes);
 app.use("/admin/dashboard", adminDashboardRoute);
 app.use("/admin/payments", viewPaymentRoute);
-app.use("/admin/course-management", courseManagementRoutes);
+app.use("/admin/courses", courseManagementRoutes);
 app.use("/admin/analytics", analyticsRoutes);
 app.use("/admin/auth", adminAuthRoutes);
 app.use("/admin/users", adminUserManagementRoutes);
