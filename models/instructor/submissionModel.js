@@ -22,6 +22,7 @@ export const getSubmissionsByCourse = async (courseId) => {
       id: item.id,                
       studentName: item.students.username,
       fileName: fileName,
+      file_url: item.assignment_url,
       grade: item.grade || "",
     };
   });
