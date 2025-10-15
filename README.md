@@ -1,53 +1,32 @@
-# 🎓 Course Platform Backend
+# 🎓 ProLearnX Backend Server
 
-A comprehensive Node.js/Express backend API for an online learning platform supporting both instructors and students with authentication, course management, quizzes, and more.
+Backend API server for the ProLearnX online learning platform. This Node.js/Express application handles authentication, course management, enrollment, payments, and all business logic for the platform.
 
-## 🚀 Features
+## 🚀 Tech Stack
 
-### 🔐 Authentication & Authorization
-- **Google OAuth 2.0** integration with Passport.js
-- **JWT-based** authentication system
-- **Supabase Auth** for user management
-- **Session management** with Express sessions
-- **Password reset** functionality via email
-
-### 👨‍🏫 Instructor Features
-- **Course Management**: Create, update, delete courses
-- **Module & Chapter** organization
-- **Quiz Creation** and management
-- **Profile Management** with image upload
-- **Course Overview** and analytics
-- **Comments & Reviews** management
-
-### 👨‍🎓 Student Features
-- **Course Enrollment** and access
-- **Dashboard** with progress tracking
-- **Quiz Taking** and results
-- **Subscription Management** with Stripe
-- **Profile Management**
-- **Course Content** streaming
-
-### 🛠️ Technical Features
-- **File Upload** to Digital Ocean Spaces
-- **Email Service** with Nodemailer (Brevo SMTP)
-- **Database** integration with Supabase
-- **Payment Processing** with Stripe
-- **CORS** enabled for frontend integration
-- **Error Handling** middleware
+- **Runtime**: Node.js
+- **Framework**: Express.js v5
+- **Database**: PostgreSQL + Supabase
+- **Authentication**: JWT, Passport.js (Google OAuth, Local Strategy)
+- **File Storage**: Digital Ocean Spaces (S3-compatible)
+- **Payment Processing**: Stripe
+- **Email Service**: Nodemailer (SMTP via Brevo)
+- **Testing**: Jest, Supertest
 
 ## 📋 Prerequisites
 
-- **Node.js** (v18 or higher)
-- **npm** or **yarn**
-- **Supabase** account and project
-- **Google OAuth** credentials
-- **Brevo/Sendinblue** SMTP account
-- **Digital Ocean Spaces** (for file storage)
-- **Stripe** account (for payments)
+- Node.js (v16 or higher)
+- PostgreSQL database
+- Digital Ocean Spaces account (for file uploads)
+- Stripe account (for payments)
+- SMTP email service (Brevo recommended)
+- Google OAuth credentials (optional, for social login)
 
 ## 🔧 Installation
 
-1. **Clone the repository**
+1. **Navigate to backend directory**
+```bash
+cd course-platform-backend
 ```bash
 git clone <repository-url>
 cd course-platform-backend
@@ -68,7 +47,7 @@ FRONTEND_URL=http://localhost:5173
 # JWT Secrets
 JWT_SECRET=your_instructor_jwt_secret
 STUDENT_JWT_SECRET=your_student_jwt_secret
-SESSION_SECRET=your_session_secret
+SESSION_SECRET=supersecret
 
 # Supabase Configuration
 SUPABASE_URL=your_supabase_project_url
@@ -81,39 +60,50 @@ GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_CALLBACK_PATH=/auth/google/callback
 
-# Email Configuration (Brevo/Sendinblue)
+# Email Configuration (Brevo SMTP)
 SMTP_USER=your_smtp_username
 SMTP_PASS=your_smtp_password
-SENDER_EMAIL=your_sender_email
-ADMIN_EMAIL=your_admin_email
-ADMIN_PASSWORD=your_admin_password
+SENDER_EMAIL=parkkavisivakaran72@gmail.com
+ADMIN_EMAIL=parkkavisivakaran72@gmail.com
 
 # Digital Ocean Spaces
 DO_SPACES_KEY=your_do_spaces_key
 DO_SPACES_SECRET=your_do_spaces_secret
 DO_SPACES_ENDPOINT=https://sgp1.digitaloceanspaces.com
-DO_SPACES_NAME=your_bucket_name
+DO_SPACES_NAME=onlinelearningplatform
 DO_SPACES_REGION=sgp1
 
 # Stripe
 STRIPE_SECRET_KEY=your_stripe_secret_key
 
-# Database (if using PostgreSQL directly)
+# PostgreSQL Database
 DB_USER=postgres
 DB_HOST=localhost
-DB_NAME=your_database_name
-DB_PASSWORD=your_db_password
+DB_NAME=Online Learning Platform
+DB_PASSWORD=your_password
 DB_PORT=5432
+
+# Frontend URLs (CORS)
+INSTRUCTOR_FRONTEND_URL=http://localhost:5173
+STUDENT_FRONTEND_URL=http://localhost:5175
+ADMIN_FRONTEND_URL=http://localhost:5174
+CLIENT_URL=http://localhost:5173
 ```
 
-4. **Start the development server**
+3. **Initialize the database**
 ```bash
-npm run server
-# or
-npm start
+# Run SQL scripts from database/ folder
+psql -U postgres -d "Online Learning Platform" -f database/SETUP_DATABASE.sql
 ```
 
-The server will start on `http://localhost:4000`
+4. **Start the server**
+```bash
+npm start          # Development mode with nodemon
+# or
+node server.js     # Production mode
+```
+
+Server runs on `http://localhost:4000`
 
 ## 📁 Project Structure
 
