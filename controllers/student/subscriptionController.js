@@ -28,8 +28,8 @@ export const createCheckoutSession = async (req, res) => {
                         quantity: 1
                     }
                 ],
-                success_url: `${process.env.CLIENT_URL}/dashboard`,
-                cancel_url: `${process.env.CLIENT_URL}`
+                success_url: `${process.env.STUDENT_FRONTEND_URL}/dashboard`,
+                cancel_url: `${process.env.STUDENT_FRONTEND_URL}`
 
             })
 
@@ -51,8 +51,8 @@ export const createCheckoutSession = async (req, res) => {
                     plan: String(plan),
                     student_id: String(studentId),
                 },
-                success_url: `${process.env.CLIENT_URL}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${process.env.CLIENT_URL}`
+                success_url: `${process.env.STUDENT_FRONTEND_URL}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `${process.env.STUDENT_FRONTEND_URL}`
 
             })
         }
@@ -158,8 +158,8 @@ export const activeCurrentPlan = async (req, res) => {
                 }
             ],
 
-            success_url: `${process.env.CLIENT_URL}/dashboard`,
-            cancel_url: `${process.env.CLIENT_URL}`
+            success_url: `${process.env.STUDENT_FRONTEND_URL}/dashboard`,
+            cancel_url: `${process.env.STUDENT_FRONTEND_URL}`
 
         })
 
