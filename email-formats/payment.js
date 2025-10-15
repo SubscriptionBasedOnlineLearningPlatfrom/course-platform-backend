@@ -22,3 +22,29 @@ export const paymentSuccessEmail = (username, planName) => {
     </div>
   `;
 }
+
+export const activePlanEmail = (username, planName, expiryDate) => {
+  return `
+    <div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+      <h2 style="color: #2196F3;">Your Current Plan is Active 🌟</h2>
+      
+      <p>Hi <strong>${username}</strong>,</p>
+      
+      <p>We’re glad to let you know that your current subscription plan is active and running smoothly:</p>
+      
+      <div style="margin: 20px 0; padding: 15px; background: #f0f8ff; border-left: 4px solid #2196F3; border-radius: 6px; font-size: 18px;">
+        📘 <strong>${planName}</strong><br/>
+        ⏰ Active until: <strong>${expiryDate}</strong>
+      </div>
+      
+      <p>You can continue to enjoy full access to all the premium content and features available under your plan.</p>
+      
+      <p style="margin-top: 20px;">
+        We’ll notify you before your plan expires so you can renew without interruption.
+      </p>
+      
+      <p style="margin-top: 30px;">Thank you for being part of our learning community!<br/>
+      <strong>The Online Learning Platform Team</strong></p>
+    </div>
+  `;
+};

@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { createEnrollment } from "../../models/student/courseModel.js";
 import { activeModel, activePlan, changeSubscriptionPlan, createPayment } from "../../models/student/subscriptionModel.js";
 import { validate } from "uuid";
-import { paymentSuccessEmail } from "../../email-formats/payment.js";
+import { activePlanEmail, paymentSuccessEmail } from "../../email-formats/payment.js";
 import { findUserById } from "../../models/student/authModel.js";
 import { transporter } from "../../config/nodemailer.js";
 
@@ -28,8 +28,8 @@ export const createCheckoutSession = async (req, res) => {
                         quantity: 1
                     }
                 ],
-                success_url: `${process.env.CLIENT_URL}/dashboard`,
-                cancel_url: `${process.env.CLIENT_URL}`
+                success_url: `${process.env.STUDENT_FRONTEND_URL}/dashboard`,
+                cancel_url: `${process.env.STUDENT_FRONTEND_URL}`
 
             })
 
@@ -51,23 +51,11 @@ export const createCheckoutSession = async (req, res) => {
                     plan: String(plan),
                     student_id: String(studentId),
                 },
-                success_url: `${process.env.CLIENT_URL}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${process.env.CLIENT_URL}`
+                success_url: `${process.env.STUDENT_FRONTEND_URL}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `${process.env.STUDENT_FRONTEND_URL}`
 
             })
         }
-
-        const student = await findUserById(studentId);
-        console.log(student)
-
-        const mailOptions = {
-            from: process.env.ADMIN_EMAIL,
-            to: student.email,
-            subject: `Thank You, ${student.username}! Your Payment for ${plan} is Complete`,
-            html: paymentSuccessEmail(student.username, plan)
-        };
-
-        await transporter.sendMail(mailOptions);
         
         res.json({ session_url: session.url })
     } catch (error) {
@@ -100,6 +88,17 @@ export const confirmCheckout = async (req, res) => {
 
         const enrollment = await createEnrollment(course_id, studentId);
         const payment = await createPayment(studentId, session.subscription?.id, plan);
+        
+        const student = await findUserById(studentId);
+
+        const mailOptions = {
+            from: process.env.ADMIN_EMAIL,
+            to: student.email,
+            subject: `Thank You, ${student.username}! Your Payment for ${plan} is Complete`,
+            html: paymentSuccessEmail(student.username, plan)
+        };
+
+        await transporter.sendMail(mailOptions);
 
         return res.status(200).json({
             ok: true,
@@ -159,12 +158,35 @@ export const activeCurrentPlan = async (req, res) => {
                 }
             ],
 
-            success_url: `${process.env.CLIENT_URL}/dashboard`,
-            cancel_url: `${process.env.CLIENT_URL}`
+            success_url: `${process.env.STUDENT_FRONTEND_URL}/dashboard`,
+            cancel_url: `${process.env.STUDENT_FRONTEND_URL}`
 
         })
 
         const payment = await activePlan(payment_id);
+
+        
+        const student = await findUserById(studentId);
+
+        const paymentActive = await activeModel(studentId);
+
+        if (!paymentActive || paymentActive.length === 0) {
+            return res.json({ has_payment: false, is_active: false });
+        }
+
+        const paymentPlan = paymentActive[0];
+        const updatedAt = new Date(paymentPlan.updated_at);
+        const expiryAt = new Date(updatedAt);
+        expiryAt.setMonth(expiryAt.getMonth() + 1);
+
+        const mailOptions = {
+            from: process.env.ADMIN_EMAIL,
+            to: student.email,
+            subject: `Good News, ${student.username}! Your ${paymentActive[0].plan} Plan Is Active`,
+            html: activePlanEmail(student.username, paymentActive[0].plan, expiryAt.toDateString())
+        };
+
+        await transporter.sendMail(mailOptions);
 
         res.json({ session_url: session.url })
     } catch (error) {
