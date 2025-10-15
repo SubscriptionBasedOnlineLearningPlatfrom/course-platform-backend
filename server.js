@@ -25,6 +25,7 @@ import quizRouter from "./routes/student/quizRoute.js";
 import profileRoute from "./routes/student/profileRoute.js";
 import courseContentRoutes from "./routes/student/courseContentRoutes.js";
 import studentSubmissionRoutes from "./routes/student/studentSubmissionRoutes.js";
+import paymentRoutes from "./routes/student/paymentRoutes.js";
 import adminDashboardRoute from "./routes/admin/adminDashboardRoute.js";
 import viewPaymentRoute from "./routes/admin/viewPaymentRoute.js";
 import { configurePassport } from "./config/passport.js";
@@ -105,6 +106,7 @@ app.use("/student/quizzes", quizRouter);
 app.use("/student/profile", profileRoute);
 app.use('/student/course', courseContentRoutes);
 app.use('/student/assignments', studentSubmissionRoutes);
+app.use('/student/plan', paymentRoutes);
 
 // Routes
 app.use("/auth", authRoutes);
